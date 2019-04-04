@@ -32,6 +32,29 @@ def factorial_recursive(n):
         # call function recursively
         return n * factorial_recursive(n - 1)
 
+# `````````` STRETCH CHALLENGES `````````` #
+
+# n!/(n-k)!
+def permutations(n, k):
+    return factorial_recursive(n)/factorial_recursive(n-k)
+
+
+def permutations_recursive_helper(n, nk):
+    print(n, nk)
+    if (n == nk):
+        return 1
+
+    return n * permutations_recursive_helper(n-1, nk)
+
+def permutations_recursive(n, k):
+    return permutations_recursive_helper(n, n-k)
+
+# n!/((n-k)!k!)
+def combinations(n, k):
+    return factorial_recursive(n)/(factorial_recursive(n-k)*factorial_recursive(k))
+
+def combinations_recursive(n, k):
+    return permutations_recursive(n,k)/factorial_recursive(k)
 
 def main():
     import sys
