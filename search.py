@@ -82,18 +82,18 @@ def binary_search_recursive(array, item, left=None, right=None):
     if (right - left <= 0):
         return None
     # set mid
-    mid = (right - left) // 2
+    mid = left + (right-left)//2
 
-    if (array[mid] == item):
-        return left + mid
+    # FOUND!!
+    if array[mid] == item:
+        return mid
 
-    # item is less than mid, go left
-    if (array[mid] > item):
+    # go left, item is less than midpoint 
+    if comesFirst(item, array[mid]):
         return binary_search_recursive(array, item, left, mid)
-
-    # item is less than mid, go left
-    if (array[mid] < item):
-        return binary_search_recursive(array, item, mid, right)
+    
+    # go right, item is greater than midpoint
+    return binary_search_recursive(array, item, mid+1, right)
     # once implemented, change binary_search to call binary_search_recursive
     # to verify that your recursive implementation passes all test
 
