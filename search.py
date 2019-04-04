@@ -38,16 +38,75 @@ def binary_search(array, item):
     return binary_search_iterative(array, item)
     # return binary_search_recursive(array, item)
 
+# return true if word1 comes before word2 in alphabetical order
+def comesFirst(word1, word2):
+    i = 0
+    j = 0
+
+    while (i < len(word1) and j < len(word2)):
+        if ord(word1[i]) < ord(word2[j]):
+            return True
+        if ord(word1[i]) > ord(word2[j]):
+            return False
+        i += 1
+        j += 1
+    return False
 
 def binary_search_iterative(array, item):
-    # TODO: implement binary search iteratively here
-    pass
+    # implement binary search iteratively here
+    left = 0
+    right = len(array)
+    while (right - left > 0):
+        mid = left + (right-left)//2
+        # if found
+        if array[mid] == item:
+            return mid
+        
+        elif comesFirst(item, array[mid]):
+            right = mid
+        else:
+            left = mid + 1
+    
+    return None
+        
     # once implemented, change binary_search to call binary_search_iterative
     # to verify that your iterative implementation passes all tests
 
 
 def binary_search_recursive(array, item, left=None, right=None):
     # TODO: implement binary search recursively here
-    pass
+    if (left == None):
+        left = 0
+    if (right == None):
+        right = len(array)
+    if (right - left <= 0):
+        return None
+    # set mid
+    mid = (right - left) // 2
+
+    if (array[mid] == item):
+        return left + mid
+
+    # item is less than mid, go left
+    if (array[mid] > item):
+        return binary_search_recursive(array, item, left, mid)
+
+    # item is less than mid, go left
+    if (array[mid] < item):
+        return binary_search_recursive(array, item, mid, right)
     # once implemented, change binary_search to call binary_search_recursive
-    # to verify that your recursive implementation passes all tests
+    # to verify that your recursive implementation passes all test
+
+if __name__ == '__main__' :
+    names = ['Alex', 'Brian', 'Julia', 'Kojin', 'Nabil', 'Nick', 'Winnie']
+    # binary search should return the index of each item in the list
+
+    print(comesFirst('Alex', 'Brian'))
+    print(comesFirst('Bpex', 'Beple'))
+    print(binary_search(names, 'Alex'))
+    print(binary_search(names, 'Brian'))
+    print(binary_search(names, 'Julia'))
+    print(binary_search(names, 'Kojin'))
+    print(binary_search(names, 'Nabil'))
+    print(binary_search(names, 'Nick'))
+    print(binary_search(names, 'Winnie'))
