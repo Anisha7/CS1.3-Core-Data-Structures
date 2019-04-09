@@ -13,8 +13,8 @@ def is_palindrome(text):
     # implement is_palindrome_iterative and is_palindrome_recursive below, then
     # change this to call your implementation to verify it passes all tests
     assert isinstance(text, str), 'input is not a string: {}'.format(text)
-    return is_palindrome_iterative(text)
-    # return is_palindrome_recursive(text)
+    # return is_palindrome_iterative(text)
+    return is_palindrome_recursive(text)
 
 
 def removePunctuation(text):
@@ -48,10 +48,30 @@ def is_palindrome_iterative(text):
     # once implemented, change is_palindrome to call is_palindrome_iterative
     # to verify that your iterative implementation passes all tests
 
-
+# recursivelt checks if a string is the same forwards as backwards, ignoring punctuation, casing, and spaces.
 def is_palindrome_recursive(text, left=None, right=None):
-    # TODO: implement the is_palindrome function recursively here
-    pass
+    # if left or right is none, initialize
+    if left == None:
+        left = 0
+    if right == None:
+        right = len(text)-1
+
+    # check for index errors/end of search
+    if left == right or left > right:
+        return True
+    
+    # check for punctuation
+    if text[left] in string.punctuation or text[left] == ' ':
+        return is_palindrome_recursive(text, left+1, right)
+    
+    if text[right] in string.punctuation or text[right] == ' ':
+        return is_palindrome_recursive(text, left, right-1)
+
+    # check for false case
+    if text[left].lower() == text[right].lower():
+        return is_palindrome_recursive(text, left+1, right-1)
+    
+    return False
     # once implemented, change is_palindrome to call is_palindrome_recursive
     # to verify that your iterative implementation passes all tests
 
