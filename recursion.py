@@ -47,7 +47,7 @@ def permutations_recursive_helper(n, nk):
     return n * permutations_recursive_helper(n-1, nk)
 
 def permutations_recursive(n, k):
-    return permutations_recursive_helper(n, n-k)
+    return int(permutations_recursive_helper(n, n-k))
 
 # n!/((n-k)!k!)
 def combinations(n, k):
@@ -64,7 +64,10 @@ def combinations_recursive_helper(n, nk, k):
 
 def combinations_recursive(n, k):
     # return permutations_recursive(n,k)/factorial_recursive(k)
-    return combinations_recursive_helper(n, n-k, k)
+    result = int(combinations_recursive_helper(n, n-k, k))
+    print(result)
+    return result
+    # return int(combinations_recursive_helper(n, n-k, k))
 
 
 
@@ -81,3 +84,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    # print(permutations_recursive(10, 3)) #720
+    print(combinations_recursive(10, 3)) #120
+    print(combinations_recursive(12, 6))

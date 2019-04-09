@@ -17,9 +17,34 @@ def is_palindrome(text):
     # return is_palindrome_recursive(text)
 
 
+def removePunctuation(text):
+    for punc in string.punctuation:
+        text = text.replace(punc, "")
+    return text
+
+# iteratively checks if a string is the same forwards as backwards, ignoring punctuation, casing, and spaces.
 def is_palindrome_iterative(text):
-    # TODO: implement the is_palindrome function iteratively here
-    pass
+    # text = removePunctuation(text)
+    i = 0
+    j = len(text)-1
+    # start checking from front and back, and meet in the middle
+    while i != j and i < j:
+        # ignore punctuation and space
+        if text[i] in string.punctuation or text[i] == ' ':
+            i += 1
+            continue
+        if text[j] in string.punctuation or text[j] == ' ':
+            j -= 1
+            continue
+        
+        # check for equality, ignore casing
+        if (text[i].lower() != text[j].lower()):
+            return False
+        i += 1
+        j -= 1
+        
+    return True
+
     # once implemented, change is_palindrome to call is_palindrome_iterative
     # to verify that your iterative implementation passes all tests
 
