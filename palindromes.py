@@ -25,23 +25,23 @@ def removePunctuation(text):
 # iteratively checks if a string is the same forwards as backwards, ignoring punctuation, casing, and spaces.
 def is_palindrome_iterative(text):
     # text = removePunctuation(text)
-    i = 0
-    j = len(text)-1
+    left = 0
+    right = len(text)-1
     # start checking from front and back, and meet in the middle
-    while i != j and i < j:
+    while left != right and left < right:
         # ignore punctuation and space
-        if text[i] in string.punctuation or text[i] == ' ':
-            i += 1
+        if text[left] in string.punctuation or text[left] == ' ':
+            left += 1
             continue
-        if text[j] in string.punctuation or text[j] == ' ':
-            j -= 1
+        if text[right] in string.punctuation or text[right] == ' ':
+            right -= 1
             continue
         
         # check for equality, ignore casing
-        if (text[i].lower() != text[j].lower()):
+        if (text[left].lower() != text[rigjt].lower()):
             return False
-        i += 1
-        j -= 1
+        left += 1
+        right -= 1
         
     return True
 

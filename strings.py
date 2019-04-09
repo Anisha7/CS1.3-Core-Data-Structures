@@ -4,7 +4,7 @@ def contains(text, pattern):
     """Return a boolean indicating whether pattern occurs in text."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
-    # TODO: Implement contains here (iteratively and/or recursively)
+    # Implement contains here (iteratively and/or recursively)
     i = 0
     for letter in text:
         # check if we found the pattern
@@ -31,7 +31,36 @@ def find_index(text, pattern):
     or None if not found."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
-    # TODO: Implement find_index here (iteratively and/or recursively)
+    # Implement find_index here (iteratively and/or recursively)
+    # make sure pattern exists
+    if (contains(text, pattern) == False):
+        return None
+    
+    i = 0
+    start = 0
+    for letter_index in range(len(text)):
+        letter = text[letter_index]
+        # check if we found the pattern
+        if i == len(pattern):
+            return start
+        # check for equality
+        elif letter == pattern[i]:
+            if i == 0: 
+                start = letter_index
+            i += 1
+        else:
+            i = 0
+            start = 0
+            # check if first pattern letter is equal to the curr letter
+            if letter == pattern[i]:
+                i += 1
+                start = letter_index
+    
+    # check if we found pattern
+    if i == len(pattern):
+        return start
+    # we didn't find it -->
+    return None
 
 
 def find_all_indexes(text, pattern):
@@ -47,6 +76,7 @@ def test_string_algorithms(text, pattern):
     print('contains({!r}, {!r}) => {}'.format(text, pattern, found))
     # TODO: Uncomment these lines after you implement find_index
     index = find_index(text, pattern)
+    print(find_index(text, pattern))
     print('find_index({!r}, {!r}) => {}'.format(text, pattern, index))
     # TODO: Uncomment these lines after you implement find_all_indexes
     indexes = find_all_indexes(text, pattern)
