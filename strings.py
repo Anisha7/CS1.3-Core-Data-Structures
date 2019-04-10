@@ -32,25 +32,13 @@ def find_index(text, pattern): # O(N) complexity
     return find_pattern_index(text, pattern, 0) # implemented recursively
     # iterative implementation can be found is file old_strings.py
 
-# Works for all edge cases, use this one
-def better_find_all_indexes(text, pattern, i, result): # O(N) complexity, (n - len(pattern))
-    # base case
-    if (pattern == ''):
-        return list(range(len(text)))
-    if (i+len(pattern) > len(text)):
-        return result
-
-    # recursive case
-    if (text[i:i+len(pattern)] == pattern):
-        result.append(i)
-    return better_find_all_indexes(text, pattern, i+1, result)
-
 def find_all_indexes(text, pattern): # O(N) complexity
     """Return a list of starting indexes of all occurrences of pattern in text,
     or an empty list if not found."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # Implement find_all_indexes here (iteratively and/or recursively)
+    # recursively implemented in old_strings.py
     result = []
     if (pattern == ''):
         return list(range(len(text)))
