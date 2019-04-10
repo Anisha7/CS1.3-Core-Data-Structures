@@ -4,26 +4,28 @@ def contains(text, pattern):
     """Return a boolean indicating whether pattern occurs in text."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
-    # Implement contains here (iteratively and/or recursively)
-    i = 0
-    for letter in text:
-        # check if we found the pattern
-        if i == len(pattern):
-            return True
-        # check for equality
-        elif letter == pattern[i]:
-            i += 1
-        else:
-            i = 0
-            # check if first pattern letter is equal to the curr letter
-            if letter == pattern[i]:
-                i += 1
+    # Implement contains here (iteratively and/or recursively) --> below commented implementation works
+    # i = 0
+    # for letter in text:
+    #     # check if we found the pattern
+    #     if i == len(pattern):
+    #         return True
+    #     # check for equality
+    #     elif letter == pattern[i]:
+    #         i += 1
+    #     else:
+    #         i = 0
+    #         # check if first pattern letter is equal to the curr letter
+    #         if letter == pattern[i]:
+    #             i += 1
     
-    # check if we found pattern
-    if i == len(pattern):
-        return True
-    # we didn't find it -->
-    return False
+    # # check if we found pattern
+    # if i == len(pattern):
+    #     return True
+    # # we didn't find it -->
+    # return False
+    # inbuilt can also be used
+    return pattern in text
 
 
 def find_index(text, pattern):
@@ -44,17 +46,13 @@ def find_index(text, pattern):
         if i == len(pattern):
             return start
         # check for equality
-        elif letter == pattern[i]:
-            if i == 0: 
-                start = letter_index
-            i += 1
-        else:
+        if letter != pattern[i]:
             i = 0
             start = 0
-            # check if first pattern letter is equal to the curr letter
-            if letter == pattern[i]:
-                i += 1
+        if letter == pattern[i]:
+            if i == 0:
                 start = letter_index
+            i += 1
     
     # check if we found pattern
     if i == len(pattern):
