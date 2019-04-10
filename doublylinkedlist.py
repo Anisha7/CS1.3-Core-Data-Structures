@@ -37,12 +37,40 @@ class DoublyLinkedList(LinkedList):
     def append(self, item):
         """Insert the given item at the tail of this linked list.
         Best and worst case running time: ??? under what conditions? [TODO]"""
-        pass
+        # Create a new node to hold the given item
+        new_node = BinaryNode(item)
+        # Check if this linked list is empty
+        if self.is_empty():
+            # Assign head to new node
+            self.head = new_node
+        else:
+            # Otherwise insert new node after tail
+            new_node.prev = self.tail
+            self.tail.next = new_node
+        # Update tail to new node regardless
+        self.tail = new_node
+
+        # add to size
+        self.size += 1
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
         Best and worst case running time: ??? under what conditions? [TODO]"""
-        pass
+        # Create a new node to hold the given item
+        new_node = BinaryNode(item)
+        # Check if this linked list is empty
+        if self.is_empty():
+            # Assign tail to new node
+            self.tail = new_node
+        else:
+            # Otherwise insert new node before head
+            self.head.prev = new_node
+            new_node.next = self.head
+        # Update head to new node regardless
+        self.head = new_node
+
+        # add to size
+        self.size += 1
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
