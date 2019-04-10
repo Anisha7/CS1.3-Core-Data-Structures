@@ -32,7 +32,42 @@ class DoublyLinkedList(LinkedList):
         raise ValueError if the given index is out of range of the list size.
         Best case running time: ??? under what conditions? [TODO]
         Worst case running time: ??? under what conditions? [TODO]"""
-        pass
+        # Check if the given index is out of range and if so raise an error
+        if not (0 <= index <= self.size):
+            raise ValueError('List index out of range: {}'.format(index))
+        
+        # if inserting in beginning
+        if index == 0:
+            self.prepend(item)
+            return
+        # if inserting at end
+        if index == self.size:
+            self.append(item)
+            return
+
+        # Find the node at the given index and insert item before it
+        curr = self.head
+        curr_index = 0
+        
+
+        while (curr_index != index and curr != None):
+            curr = curr.next
+            curr_index += 1
+        
+        if curr == None:
+            raise ValueError('Item does not exist!!!: {}'.format(index))
+        assert curr_index == index
+        # found node before curr index
+        # insert before this node
+        new_node = BinaryNode(item)
+        new_node.next = curr # initialize next for new_node
+        temp = curr.prev # hold list before node
+        temp.next = new_node # add new node to its next
+        new_node.prev = temp # initialize prev for new_node
+        curr.prev = new_node # add new node behind our curr
+        
+        # update size after inserting
+        self.size += 1
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
