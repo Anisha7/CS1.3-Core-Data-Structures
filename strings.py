@@ -119,6 +119,38 @@ def main():
         print("find_all_indexes('abra cadabra', 'abra') => [0, 8]")
 
 
+# '''''''''''''' STRETCH CHALLENGES: Permutations and Anagrams ''''''''''''''''''''''' #
+def countOccurances(letter, word):
+    count = 0
+    for l in word:
+        if l == letter:
+            count += 1
+    return count
+
+def permutation_helper(word, result, curr=-1, temp=''):
+    if len(temp) == len(word):
+        result.append(temp)
+        return
+
+    for i in range(len(word)):
+        if curr == i or countOccurances(word[i], temp) == countOccurances(word[i], word):
+            continue
+        print(temp)
+        permutation_helper(word, result, i, temp+word[i])
+    return
+
+
+def permutation(word):
+    result = []
+    permutation_helper(word, result)
+    return result
+
+
+def anagram():
+    return
+
+
 if __name__ == '__main__':
     # 'ababc', 'abc'
-    main()
+    # main()
+    print(permutation("batee"))
