@@ -68,6 +68,7 @@ def find_index(text, pattern): # O(N) complexity
     # # we didn't find it -->
     # return None
 
+# no longer used, does not take care of overlapping edge case text="aaa", pattern="aa"
 def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
     # print(left)
     if (pattern == ''):
@@ -87,6 +88,7 @@ def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
     
     return find_all_indexes_helper(text, pattern, result, left)
 
+# Works for all edge cases, use this one
 def better_find_all_indexes(text, pattern, i, result): # O(N) complexity, (n - len(pattern))
     if (pattern == ''):
         return list(range(len(text)))
