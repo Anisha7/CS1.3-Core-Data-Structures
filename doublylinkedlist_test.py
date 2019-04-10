@@ -28,3 +28,13 @@ class LinkedListTest(unittest.TestCase):
         assert ll.head.prev is None # check prev
         assert ll.tail.prev.data == 'B' # check prev
         assert ll.size == 3
+
+    def test_items(self):
+        ll = DoublyLinkedList()
+        assert ll.items() == []
+        ll.append('B')
+        assert ll.items() == ['B']
+        ll.prepend('A')
+        assert ll.items() == ['A', 'B']
+        ll.append('C')
+        assert ll.items() == ['A', 'B', 'C']
