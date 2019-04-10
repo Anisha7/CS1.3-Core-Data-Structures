@@ -145,12 +145,30 @@ def permutation(word):
     permutation_helper(word, result)
     return result
 
+def isValidWord(word):
+    with open('/usr/share/dict/words') as f:
+        content = f.read()
+    return word in  content
+    # return True
 
-def anagram():
+def anagram_helper(word, result, curr=-1, temp=''):
+    if len(temp) == len(word) and isValidWord(temp):
+        result.append(temp)
+        return
+
+    for i in range(len(word)):
+        if curr == i or countOccurances(word[i], temp) == countOccurances(word[i], word):
+            continue
+        anagram_helper(word, result, i, temp+word[i])
     return
 
+def anagram(word):
+    result = []
+    anagram_helper(word, result)
+    return result
+    
 
 if __name__ == '__main__':
     # 'ababc', 'abc'
     # main()
-    print(permutation("batee"))
+    print(anagram("pea"))
