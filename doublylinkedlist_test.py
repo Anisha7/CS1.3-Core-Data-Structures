@@ -38,3 +38,21 @@ class LinkedListTest(unittest.TestCase):
         assert ll.items() == ['A', 'B']
         ll.append('C')
         assert ll.items() == ['A', 'B', 'C']
+
+    def test_length(self):
+        ll = DoublyLinkedList()
+        assert ll.length() == 0
+        # append and prepend operations increase length
+        ll.append('B')
+        assert ll.length() == 1
+        ll.prepend('A')
+        assert ll.length() == 2
+        ll.append('C')
+        assert ll.length() == 3
+        # delete operations decrease length
+        ll.delete('B')
+        assert ll.length() == 2
+        ll.delete('C')
+        assert ll.length() == 1
+        ll.delete('A')
+        assert ll.length() == 0
