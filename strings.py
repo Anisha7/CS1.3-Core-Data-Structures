@@ -5,25 +5,25 @@ def contains(text, pattern): # O(N) complexity
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # Implement contains here (iteratively and/or recursively) --> below commented implementation works
-    # i = 0
-    # for letter in text:
-    #     # check if we found the pattern
-    #     if i == len(pattern):
-    #         return True
-    #     # check for equality
-    #     elif letter == pattern[i]:
-    #         i += 1
-    #     else:
-    #         i = 0
-    #         # check if first pattern letter is equal to the curr letter
-    #         if letter == pattern[i]:
-    #             i += 1
+    i = 0
+    for letter in text:
+        # check if we found the pattern
+        if i == len(pattern):
+            return True
+        # check for equality
+        elif letter == pattern[i]:
+            i += 1
+        else:
+            i = 0
+            # check if first pattern letter is equal to the curr letter
+            if letter == pattern[i]:
+                i += 1
     
-    # # check if we found pattern
-    # if i == len(pattern):
-    #     return True
-    # # we didn't find it -->
-    # return False
+    # check if we found pattern
+    if i == len(pattern):
+        return True
+    # we didn't find it -->
+    return False
     # inbuilt can also be used
     return pattern in text
 
@@ -87,8 +87,17 @@ def find_all_indexes(text, pattern): # O(N) complexity
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # TODO: Implement find_all_indexes here (iteratively and/or recursively)
     result = []
-    return find_all_indexes_helper(text, pattern, result, 0)
+    # return find_all_indexes_helper(text, pattern, result, 0)
+    return experimental_find_all_indexes(text, pattern, 0, result)
 
+def experimental_find_all_indexes(text, pattern, i, result):
+    if (pattern == ''):
+        return list(range(len(text)))
+    if (i+len(pattern) > len(text)):
+        return result
+    if (text[i:i+len(pattern)] == pattern):
+        result.append(i)
+    return experimental_find_all_indexes(text, pattern, i+1, result)
 
 def test_string_algorithms(text, pattern):
     found = contains(text, pattern)
