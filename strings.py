@@ -79,25 +79,26 @@ def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
     
     return find_all_indexes_helper(text, pattern, result, left)
 
-
-def find_all_indexes(text, pattern): # O(N) complexity
-    """Return a list of starting indexes of all occurrences of pattern in text,
-    or an empty list if not found."""
-    assert isinstance(text, str), 'text is not a string: {}'.format(text)
-    assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
-    # TODO: Implement find_all_indexes here (iteratively and/or recursively)
-    result = []
-    # return find_all_indexes_helper(text, pattern, result, 0)
-    return experimental_find_all_indexes(text, pattern, 0, result)
-
-def experimental_find_all_indexes(text, pattern, i, result):
+def better_find_all_indexes(text, pattern, i, result):
     if (pattern == ''):
         return list(range(len(text)))
     if (i+len(pattern) > len(text)):
         return result
     if (text[i:i+len(pattern)] == pattern):
         result.append(i)
-    return experimental_find_all_indexes(text, pattern, i+1, result)
+    return better_find_all_indexes(text, pattern, i+1, result)
+
+def find_all_indexes(text, pattern): # O(N) complexity
+    """Return a list of starting indexes of all occurrences of pattern in text,
+    or an empty list if not found."""
+    assert isinstance(text, str), 'text is not a string: {}'.format(text)
+    assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
+    # Implement find_all_indexes here (iteratively and/or recursively)
+    result = []
+    # return find_all_indexes_helper(text, pattern, result, 0)
+    return better_find_all_indexes(text, pattern, 0, result)
+
+
 
 def test_string_algorithms(text, pattern):
     found = contains(text, pattern)
