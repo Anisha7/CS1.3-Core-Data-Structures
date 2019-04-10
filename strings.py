@@ -55,10 +55,10 @@ def find_all_indexes(text, pattern): # O(N) complexity
 def test_string_algorithms(text, pattern): 
     found = contains(text, pattern)
     print('contains({!r}, {!r}) => {}'.format(text, pattern, found))
-    # TODO: Uncomment these lines after you implement find_index
+    # Uncomment these lines after you implement find_index
     index = find_index(text, pattern)
     print('find_index({!r}, {!r}) => {}'.format(text, pattern, index))
-    # TODO: Uncomment these lines after you implement find_all_indexes
+    # Uncomment these lines after you implement find_all_indexes
     indexes = find_all_indexes(text, pattern)
     print('find_all_indexes({!r}, {!r}) => {}'.format(text, pattern, indexes))
 
@@ -109,8 +109,7 @@ def permutation(word):
 def isValidWord(word):
     with open('/usr/share/dict/words') as f:
         content = f.read()
-    return word in  content
-    # return True
+    return word in content
 
 def anagram_helper(word, result, curr=-1, temp=''):
     if len(temp) == len(word) and isValidWord(temp):
