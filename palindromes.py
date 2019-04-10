@@ -16,14 +16,8 @@ def is_palindrome(text):
     # return is_palindrome_iterative(text)
     return is_palindrome_recursive(text)
 
-
-def removePunctuation(text):
-    for punc in string.punctuation:
-        text = text.replace(punc, "")
-    return text
-
 # iteratively checks if a string is the same forwards as backwards, ignoring punctuation, casing, and spaces.
-def is_palindrome_iterative(text):
+def is_palindrome_iterative(text): # O(N) complexity 
     # text = removePunctuation(text)
     left = 0
     right = len(text)-1
@@ -38,7 +32,7 @@ def is_palindrome_iterative(text):
             continue
         
         # check for equality, ignore casing
-        if (text[left].lower() != text[rigjt].lower()):
+        if (text[left].lower() != text[right].lower()):
             return False
         left += 1
         right -= 1
@@ -49,7 +43,7 @@ def is_palindrome_iterative(text):
     # to verify that your iterative implementation passes all tests
 
 # recursivelt checks if a string is the same forwards as backwards, ignoring punctuation, casing, and spaces.
-def is_palindrome_recursive(text, left=None, right=None):
+def is_palindrome_recursive(text, left=None, right=None): # O(N) complexity 
     # if left or right is none, initialize
     if left == None:
         left = 0
