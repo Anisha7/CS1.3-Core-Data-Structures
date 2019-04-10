@@ -1,27 +1,40 @@
 #!python
-# NOTE: File old_strings.py contains various versions of below functions, 
-# iterative/recursive, individually implemented. This file has refactored code.
-# NOTE: Stretch challenges (Permutations and Anagrams) are at the bottom of this file.
-
-# ```````````````       HELPERS     ``````````````` #
-def find_pattern_index(text, pattern, i):
-    if (pattern == ''):
-        return i
-    if (i+len(pattern) > len(text)):
-        return None
-    if (text[i:i+len(pattern)] == pattern):
-        return i
-    return find_pattern_index(text, pattern, i+1)
 
 def contains(text, pattern): # O(N) complexity
     """Return a boolean indicating whether pattern occurs in text."""
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # Implement contains here (iteratively and/or recursively) --> below commented implementation works
-    i = find_pattern_index(text, pattern, 0)
-    if i == None:
-        return False
-    return True
+    i = 0
+    for letter in text:
+        # check if we found the pattern
+        if i == len(pattern):
+            return True
+        # check for equality
+        elif letter == pattern[i]:
+            i += 1
+        else:
+            i = 0
+            # check if first pattern letter is equal to the curr letter
+            if letter == pattern[i]:
+                i += 1
+    
+    # check if we found pattern
+    if i == len(pattern):
+        return True
+    # we didn't find it -->
+    return False
+    # inbuilt can also be used
+    # return pattern in text
+
+def better_find_index(text, pattern, i):
+    if (pattern == ''):
+        return i
+    if (i+len(pattern) > len(text)):
+        return None
+    if (text[i:i+len(pattern)] == pattern):
+        return i
+    return better_find_index(text, pattern, i+1)
 
 def find_index(text, pattern): # O(N) complexity
     """Return the starting index of the first occurrence of pattern in text,
@@ -29,8 +42,55 @@ def find_index(text, pattern): # O(N) complexity
     assert isinstance(text, str), 'text is not a string: {}'.format(text)
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # Implement find_index here (iteratively and/or recursively)
-    return find_pattern_index(text, pattern, 0) # implemented recursively
-    # iterative implementation can be found is file old_strings.py
+    # make sure pattern exists
+    if (contains(text, pattern) == False):
+        return None
+    return better_find_index(text, pattern, 0) # implemented recursively
+
+# iteratively implemented find_index
+def find_index_iteratively(text, pattern):
+    i = 0
+    start = 0
+    for letter_index in range(len(text)):
+        letter = text[letter_index]
+        # check if we found the pattern
+        if i == len(pattern):
+            return start
+        # check for equality
+        if letter != pattern[i]:
+            i = 0
+            start = 0
+        if letter == pattern[i]:
+            if i == 0:
+                start = letter_index
+            i += 1
+    
+    # check if we found pattern
+    if i == len(pattern):
+        return start
+    # we didn't find it -->
+    return None
+
+# no longer used, does not take care of overlapping edge case text="aaa", pattern="aa"
+def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
+    # print(left)
+    if (pattern == ''):
+        return list(range(len(text)))
+    # make sure pattern exists
+    if (contains(text[left:], pattern) == False):
+        return result
+
+    if (len(text[left:]) <= 0 or left >= len(text)):
+        return result
+
+    # gets the first index for pattern in text
+    found_index = find_index(text[left:], pattern) + left
+    result.append(found_index)
+
+    # we didn't find it -->
+    left = found_index + len(pattern)
+    
+    return find_all_indexes_helper(text, pattern, result, left)
 
 # Works for all edge cases, use this one
 def better_find_all_indexes(text, pattern, i, result): # O(N) complexity, (n - len(pattern))
@@ -52,16 +112,9 @@ def find_all_indexes(text, pattern): # O(N) complexity
     assert isinstance(pattern, str), 'pattern is not a string: {}'.format(text)
     # Implement find_all_indexes here (iteratively and/or recursively)
     result = []
-    if (pattern == ''):
-        return list(range(len(text)))
+    # return find_all_indexes_helper(text, pattern, result, 0)
+    return better_find_all_indexes(text, pattern, 0, result)
 
-    i = -1
-    while (i < len(text) and i != None):
-        i = find_pattern_index(text, pattern, i+1)
-        if (i == None):
-            break
-        result.append(i)
-    return result
 
 
 def test_string_algorithms(text, pattern): 
@@ -112,6 +165,7 @@ def permutation_helper(word, result, curr=-1, temp=''):
         print(temp)
         permutation_helper(word, result, i, temp+word[i])
     return
+
 
 def permutation(word):
     result = []
