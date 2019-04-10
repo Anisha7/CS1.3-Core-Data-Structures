@@ -60,6 +60,7 @@ class ArrayStack(object):
         """Initialize this stack and push the given items, if any."""
         # Initialize a new list (dynamic array) to store the items
         self.list = list()
+        self.size = 0
         if iterable is not None:
             for item in iterable:
                 self.push(item)
@@ -70,30 +71,39 @@ class ArrayStack(object):
 
     def is_empty(self):
         """Return True if this stack is empty, or False otherwise."""
-        # TODO: Check if empty
+        return self.size == 0
 
     def length(self):
         """Return the number of items in this stack."""
-        # TODO: Count number of items
+        return self.size
 
     def push(self, item):
         """Insert the given item on the top of this stack.
-        Running time: O(???) – Why? [TODO]"""
-        # TODO: Insert given item
+        Running time: O(???) – Why? [TODO]""" 
+        # first item is at end of list for O(1)
+        self.list.append(item)
+        self.size += 1
 
     def peek(self):
         """Return the item on the top of this stack without removing it,
         or None if this stack is empty."""
-        # TODO: Return top item, if any
+        # Return top item, if any (top item == item at end of list)
+        if self.is_empty():
+            return None
+        return self.list[-1]
 
     def pop(self):
         """Remove and return the item on the top of this stack,
         or raise ValueError if this stack is empty.
         Running time: O(???) – Why? [TODO]"""
-        # TODO: Remove and return top item, if any
+        # Remove and return top item, if any (top item == item at end of list)
+        if self.is_empty():
+            raise ValueError("No values in stack to POP")
+        self.size -= 1
+        return self.list.pop() 
 
 
 # Implement LinkedStack and ArrayStack above, then change the assignment below
 # to use each of your Stack implementations to verify they each pass all tests
-Stack = LinkedStack
-# Stack = ArrayStack
+# Stack = LinkedStack
+Stack = ArrayStack
