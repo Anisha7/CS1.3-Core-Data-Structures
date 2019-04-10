@@ -97,7 +97,7 @@ def permutation_helper(word, result, curr=-1, temp=''):
     for i in range(len(word)):
         if curr == i or countOccurances(word[i], temp) == countOccurances(word[i], word):
             continue
-        print(temp)
+
         permutation_helper(word, result, i, temp+word[i])
     return
 
@@ -130,6 +130,4 @@ def anagram(word):
     
 
 if __name__ == '__main__':
-    # 'ababc', 'abc'
-    # main()
-    print(anagram("pea"))
+    main()
