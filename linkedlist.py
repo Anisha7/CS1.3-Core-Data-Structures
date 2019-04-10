@@ -78,7 +78,7 @@ class LinkedList(object):
         # Check if the given index is out of range and if so raise an error
         if not (0 <= index < self.size):
             raise ValueError('List index out of range: {}'.format(index))
-        # TODO: Find the node at the given index and return its data
+        # Find the node at the given index and return its data
         curr = self.head
         curr_index = 0
 
@@ -127,7 +127,7 @@ class LinkedList(object):
         new_node = Node(item) # create new item
         new_node.next = temp # add the next val to the new node
         curr.next = new_node # add new item
-        
+
         # update size after inserting
         self.size += 1
         
@@ -193,7 +193,20 @@ class LinkedList(object):
         Worst case running time: ??? under what conditions? [TODO]"""
         # TODO: Find the node containing the given old_item and replace its
         # data with new_item, without creating a new node object
-        pass
+        curr = self.head
+
+        while (curr != None and curr.data != old_item):
+            curr = curr.next
+        
+        if curr == None:
+            raise ValueError('Item does not exist!!!: {}'.format(old_item))
+
+        # found curr item
+        assert curr.data == old_item
+        # replace with new_item
+        curr.data = new_item 
+        return
+        
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
