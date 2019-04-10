@@ -25,8 +25,16 @@ def contains(text, pattern): # O(N) complexity
     # we didn't find it -->
     return False
     # inbuilt can also be used
-    return pattern in text
+    # return pattern in text
 
+def better_find_index(text, pattern, i):
+    if (pattern == ''):
+        return i
+    if (i+len(pattern) > len(text)):
+        return None
+    if (text[i:i+len(pattern)] == pattern):
+        return i
+    return better_find_index(text, pattern, i+1)
 
 def find_index(text, pattern): # O(N) complexity
     """Return the starting index of the first occurrence of pattern in text,
@@ -37,28 +45,28 @@ def find_index(text, pattern): # O(N) complexity
     # make sure pattern exists
     if (contains(text, pattern) == False):
         return None
+    return better_find_index(text, pattern, 0) # implemented recursively
+    # i = 0
+    # start = 0
+    # for letter_index in range(len(text)):
+    #     letter = text[letter_index]
+    #     # check if we found the pattern
+    #     if i == len(pattern):
+    #         return start
+    #     # check for equality
+    #     if letter != pattern[i]:
+    #         i = 0
+    #         start = 0
+    #     if letter == pattern[i]:
+    #         if i == 0:
+    #             start = letter_index
+    #         i += 1
     
-    i = 0
-    start = 0
-    for letter_index in range(len(text)):
-        letter = text[letter_index]
-        # check if we found the pattern
-        if i == len(pattern):
-            return start
-        # check for equality
-        if letter != pattern[i]:
-            i = 0
-            start = 0
-        if letter == pattern[i]:
-            if i == 0:
-                start = letter_index
-            i += 1
-    
-    # check if we found pattern
-    if i == len(pattern):
-        return start
-    # we didn't find it -->
-    return None
+    # # check if we found pattern
+    # if i == len(pattern):
+    #     return start
+    # # we didn't find it -->
+    # return None
 
 def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
     # print(left)
@@ -79,7 +87,7 @@ def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
     
     return find_all_indexes_helper(text, pattern, result, left)
 
-def better_find_all_indexes(text, pattern, i, result):
+def better_find_all_indexes(text, pattern, i, result): # O(N) complexity, (n - len(pattern))
     if (pattern == ''):
         return list(range(len(text)))
     if (i+len(pattern) > len(text)):
@@ -100,7 +108,7 @@ def find_all_indexes(text, pattern): # O(N) complexity
 
 
 
-def test_string_algorithms(text, pattern):
+def test_string_algorithms(text, pattern): 
     found = contains(text, pattern)
     print('contains({!r}, {!r}) => {}'.format(text, pattern, found))
     # TODO: Uncomment these lines after you implement find_index
