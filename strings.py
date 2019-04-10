@@ -46,27 +46,30 @@ def find_index(text, pattern): # O(N) complexity
     if (contains(text, pattern) == False):
         return None
     return better_find_index(text, pattern, 0) # implemented recursively
-    # i = 0
-    # start = 0
-    # for letter_index in range(len(text)):
-    #     letter = text[letter_index]
-    #     # check if we found the pattern
-    #     if i == len(pattern):
-    #         return start
-    #     # check for equality
-    #     if letter != pattern[i]:
-    #         i = 0
-    #         start = 0
-    #     if letter == pattern[i]:
-    #         if i == 0:
-    #             start = letter_index
-    #         i += 1
+
+# iteratively implemented find_index
+def find_index_iteratively(text, pattern):
+    i = 0
+    start = 0
+    for letter_index in range(len(text)):
+        letter = text[letter_index]
+        # check if we found the pattern
+        if i == len(pattern):
+            return start
+        # check for equality
+        if letter != pattern[i]:
+            i = 0
+            start = 0
+        if letter == pattern[i]:
+            if i == 0:
+                start = letter_index
+            i += 1
     
-    # # check if we found pattern
-    # if i == len(pattern):
-    #     return start
-    # # we didn't find it -->
-    # return None
+    # check if we found pattern
+    if i == len(pattern):
+        return start
+    # we didn't find it -->
+    return None
 
 # no longer used, does not take care of overlapping edge case text="aaa", pattern="aa"
 def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
@@ -79,10 +82,11 @@ def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
 
     if (len(text[left:]) <= 0 or left >= len(text)):
         return result
+
     # gets the first index for pattern in text
     found_index = find_index(text[left:], pattern) + left
-    # print("ADDING: %d"% found_index)
     result.append(found_index)
+
     # we didn't find it -->
     left = found_index + len(pattern)
     
@@ -90,10 +94,13 @@ def find_all_indexes_helper(text, pattern, result, left): # O(N) complexity
 
 # Works for all edge cases, use this one
 def better_find_all_indexes(text, pattern, i, result): # O(N) complexity, (n - len(pattern))
+    # base case
     if (pattern == ''):
         return list(range(len(text)))
     if (i+len(pattern) > len(text)):
         return result
+
+    # recursive case
     if (text[i:i+len(pattern)] == pattern):
         result.append(i)
     return better_find_all_indexes(text, pattern, i+1, result)
