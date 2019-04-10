@@ -6,6 +6,8 @@ import string
 # string.ascii_uppercase is 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 # string.ascii_letters is ascii_lowercase + ascii_uppercase
 
+# Use frozenset for constant lookup time
+punctuation = frozenset(string.punctuation)
 
 def is_palindrome(text):
     """A string of characters is a palindrome if it reads the same forwards and
@@ -24,10 +26,10 @@ def is_palindrome_iterative(text): # O(N) complexity
     # start checking from front and back, and meet in the middle
     while left != right and left < right:
         # ignore punctuation and space
-        if text[left] in string.punctuation or text[left] == ' ':
+        if text[left] in punctuation or text[left] == ' ':
             left += 1
             continue
-        if text[right] in string.punctuation or text[right] == ' ':
+        if text[right] in punctuation or text[right] == ' ':
             right -= 1
             continue
         
@@ -55,10 +57,10 @@ def is_palindrome_recursive(text, left=None, right=None): # O(N) complexity
         return True
     
     # check for punctuation
-    if text[left] in string.punctuation or text[left] == ' ':
+    if text[left] in punctuation or text[left] == ' ':
         return is_palindrome_recursive(text, left+1, right)
     
-    if text[right] in string.punctuation or text[right] == ' ':
+    if text[right] in punctuation or text[right] == ' ':
         return is_palindrome_recursive(text, left, right-1)
 
     # check for false case
