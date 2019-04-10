@@ -61,6 +61,7 @@ class DoublyLinkedList(LinkedList):
         # Check if this linked list is empty
         if self.is_empty():
             # Assign tail to new node
+            new_node.prev = self.head
             self.tail = new_node
         else:
             # Otherwise insert new node before head
