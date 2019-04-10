@@ -30,8 +30,8 @@ class DoublyLinkedList(LinkedList):
     def insert_at_index(self, index, item):
         """Insert the given item at the given index in this linked list, or
         raise ValueError if the given index is out of range of the list size.
-        Best case running time: ??? under what conditions? [TODO]
-        Worst case running time: ??? under what conditions? [TODO]"""
+        Best case running time: O(1) if first or last index
+        Worst case running time: O(N) if last-1 index or doesn't exist"""
         # Check if the given index is out of range and if so raise an error
         if not (0 <= index <= self.size):
             raise ValueError('List index out of range: {}'.format(index))
@@ -65,13 +65,13 @@ class DoublyLinkedList(LinkedList):
         temp.next = new_node # add new node to its next
         new_node.prev = temp # initialize prev for new_node
         curr.prev = new_node # add new node behind our curr
-        
+
         # update size after inserting
         self.size += 1
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
-        Best and worst case running time: ??? under what conditions? [TODO]"""
+        Best and worst case running time: O(1) always"""
         # Create a new node to hold the given item
         new_node = BinaryNode(item)
         # Check if this linked list is empty
@@ -90,7 +90,7 @@ class DoublyLinkedList(LinkedList):
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
-        Best and worst case running time: ??? under what conditions? [TODO]"""
+        Best and worst case running time: O(1) always"""
         # Create a new node to hold the given item
         new_node = BinaryNode(item)
         # Check if this linked list is empty
@@ -127,8 +127,8 @@ class DoublyLinkedList(LinkedList):
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        Best case running time: ??? under what conditions? [TODO]
-        Worst case running time: ??? under what conditions? [TODO]"""
+        Best case running time: O(1) if its the first value
+        Worst case running time: O(N) if its the last value or doesn't exist"""
         node = self.findNode(item)
         # found item
         if (node != None):
