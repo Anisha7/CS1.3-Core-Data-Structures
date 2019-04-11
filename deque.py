@@ -22,30 +22,36 @@ class Deque(object):
 
     def is_empty(self):
         """Return True if this queue is empty, or False otherwise."""
+        """Complexity: O(1), inbuilt doubly linked list method"""
         # Check if empty
         return self.list.is_empty()
 
     def length(self):
         """Return the number of items in this queue."""
+        """Complexity: O(1), inbuilt doubly linked list method"""
         # Count number of items
         return self.list.length()
 
     def push_front(self, item):
         """ insert item at the front of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method"""
         self.list.prepend(item)
 
     def push_back(self, item):
         """ insert item at the back of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method"""
         self.list.append(item)
 
     def front(self):
         """ return the item at the front of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method, for front of list"""
         if self.is_empty():
             return None
         return self.list.get_at_index(0)
 
     def back(self):
         """ return the item at the back of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method, for back of list"""
         if self.is_empty():
             return None
         last_index = self.length()-1
@@ -53,6 +59,7 @@ class Deque(object):
 
     def pop_front(self):
         """  remove and return the item at the front of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method, for front of list"""
         if self.is_empty():
             raise ValueError("Cannot pop from empty Deque")
         item = self.front()
@@ -61,6 +68,7 @@ class Deque(object):
 
     def pop_back(self):
         """ remove and return the item at the back of the deque """
+        """Complexity: O(1), inbuilt doubly linked list method, for back of list"""
         if self.is_empty():
             raise ValueError("Cannot pop from empty Deque")
         item = self.back()

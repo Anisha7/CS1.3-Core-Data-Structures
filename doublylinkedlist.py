@@ -127,8 +127,8 @@ class DoublyLinkedList(LinkedList):
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        Best case running time: O(1) if its the first value
-        Worst case running time: O(N) if its the last value or doesn't exist"""
+        Best case running time: O(1) if its the first or last value
+        Worst case running time: O(N) if its the second to last value or doesn't exist"""
         node = self.findNode(item)
         # found item
         if (node != None):
