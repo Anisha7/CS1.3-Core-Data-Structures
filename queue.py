@@ -32,7 +32,7 @@ class LinkedQueue(object):
 
     def enqueue(self, item):
         """Insert the given item at the back of this queue.
-        Running time: O(???) – Why? [TODO]"""
+        Running time: O(1) – Why? appending to tail is O(1) because tail is stored"""
         # Insert given item at end/tail of list
         self.list.append(item)
 
@@ -47,7 +47,7 @@ class LinkedQueue(object):
     def dequeue(self):
         """Remove and return the item at the front of this queue,
         or raise ValueError if this queue is empty.
-        Running time: O(???) – Why? [TODO]"""
+        Running time: O(1) – Why? removing head item is O(1) because we don't need to find it"""
         if self.is_empty():
             raise ValueError("Cannot dequeue an empty queue!!")
         # Remove and return front item, if any
