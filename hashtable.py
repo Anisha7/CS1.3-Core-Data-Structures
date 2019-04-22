@@ -6,10 +6,15 @@ from linkedlist import LinkedList
 
 class HashTable(object):
 
-    def __init__(self, init_size=8):
+    def __init__(self, init_size=8, items = None):
         """Initialize this hash table with the given initial size."""
         self.buckets = [LinkedList() for i in range(init_size)]
         self.size = 0  # Number of key-value entries
+        # Insert each key-value entry into the list of buckets,
+        # which will rehash them into a new bucket index based on the new size
+        if items is not None: 
+            for key, value in items:
+                self.set(key, value)
 
     def __str__(self):
         """Return a formatted string representation of this hash table."""
@@ -67,13 +72,7 @@ class HashTable(object):
     def length(self):
         """Return the number of key-value entries by traversing its buckets.
         Best and worst case running time: O(1) always"""
-        # # Count number of key-value entries in each of the buckets
-        # item_count = 0
-        # for bucket in self.buckets:
-        #     item_count += bucket.length()
-        # return item_count
-        # # Equivalent to this list comprehension:
-        # return sum(bucket.length() for bucket in self.buckets)
+        # return number of key-value entries in each of the buckets
         return self.size
 
     def contains(self, key):
@@ -164,12 +163,8 @@ class HashTable(object):
         # Get a list to temporarily hold all current key-value entries
         all_items = self.items()
         # Create a new list of new_size total empty linked list buckets
-        self.buckets = [LinkedList() for i in range(new_size)]
-        self.size = 0
-        # Insert each key-value entry into the new list of buckets,
-        # which will rehash them into a new bucket index based on the new size
-        for key, value in all_items:
-            self.set(key, value)
+        # and insert values into new buckets
+        self.__init__(new_size, all_items)
 
 
 def test_hash_table():
