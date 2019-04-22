@@ -61,8 +61,8 @@ class HashTable(object):
 
     def items(self):
         """Return a list of all entries (key-value pairs) in this hash table.
-        Best and worst case running time: O(N) always where N is the number of 
-        items in hash table"""
+        Best and worst case running time: O(b) always where b is the number of 
+        buckets in hash table"""
         # Collect all pairs of key-value entries in each of the buckets
         all_items = []
         for bucket in self.buckets:
@@ -78,7 +78,7 @@ class HashTable(object):
     def contains(self, key):
         """Return True if this hash table contains the given key, or False.
         Best case running time: O(1) if its the first element in the bucket
-        Worst case running time: O(N) if its the last element in the bucket"""
+        Worst case running time: O(m), m = # items in bucket, if its the last element in the bucket"""
         # Find the bucket the given key belongs in
         index = self._bucket_index(key)
         bucket = self.buckets[index]
@@ -89,7 +89,7 @@ class HashTable(object):
     def get(self, key):
         """Return the value associated with the given key, or raise KeyError.
         Best case running time: O(1) if its the first element in the bucket
-        Worst case running time: O(N) if its the last element in the bucket"""
+        Worst case running time: O(m), m = # of items in bucket, if its the last element in the bucket"""
         # Find the bucket the given key belongs in
         index = self._bucket_index(key)
         bucket = self.buckets[index]
@@ -106,7 +106,7 @@ class HashTable(object):
     def set(self, key, value):
         """Insert or update the given key with its associated value.
         Best case running time: O(1) if its the first element in the bucket
-        Worst case running time: O(N) if its the last element in the bucket 
+        Worst case running time: O(m), m = # of items in bucket, if its the last element in the bucket 
         or does not exist"""
         # Find the bucket the given key belongs in
         index = self._bucket_index(key)
@@ -130,13 +130,13 @@ class HashTable(object):
     def delete(self, key):
         """Delete the given key and its associated value, or raise KeyError.
         Best case running time: O(1) if its the first element in the bucket
-        Worst case running time: O(N) if its the last element in the bucket 
+        Worst case running time: O(m), m = # of items in bucket, if its the last element in the bucket 
         or does not exist"""
         # Find the bucket the given key belongs in
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Find the entry with the given key in that bucket, if one exists
-        entry = bucket.find(lambda key_value: key_value[0] == key)
+        entry = bucket.find(lambda key_value: key_value[0] == key) # (O(m)), m = # of items in bucket
         if entry is not None:  # Found
             # Remove the key-value entry from the bucket
             bucket.delete(entry)
@@ -161,10 +161,10 @@ class HashTable(object):
         elif new_size is 0:
             new_size = len(self.buckets) / 2  # Half size
         # Get a list to temporarily hold all current key-value entries
-        all_items = self.items()
+        all_items = self.items() # O(b), b = # of buckets
         # Create a new list of new_size total empty linked list buckets
         # and insert values into new buckets
-        self.__init__(new_size, all_items)
+        self.__init__(new_size, all_items) # O(N), N = # of items in hash table
 
 
 def test_hash_table():
