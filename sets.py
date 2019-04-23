@@ -41,7 +41,7 @@ class Set(HashSet):
 
     # removes x from set s if present
     def discard(self, item):
-        """This function deletes an element from the set.The time complexity 
+        """This function deletes an element from the set. The time complexity 
         would be O(m) in the worst case, where m is the number of items 
         in that bucket. The bests case is O(1) and average case is O(1)
         because we maintain a load factor of 0.75. Space complexity is
@@ -51,51 +51,98 @@ class Set(HashSet):
 
     # remove and return an arbitrary element from s; raises KeyError if empty
     def pop(self):
-        pass
+        if self.size == 0:
+            raise KeyError('Empty Set')
+
+        # will be O(1) because it gets the first item
+        for bucket in self.buckets:
+            for item in bucket:
+                temp = item
+                bucket.delete(item) # O(1) also because deleting first item
+                return temp
 
     # remove all elements from set s
     def clear(self):
+        """This function reinitializes an empty set. The time complexity is O(init size)
+        and space complexity is also O(init size)."""
         self.__init__()
+        # Note: it might be better to delete all elements to save space! 
+        # Right now, it reallocates, thus using more space.
 
     # return set s with elements added from t
     def update(self, t):
-        pass
+        for item in t:
+            self.add(item)
 
     # return set s keeping only elements also found in t
     def intersection_update(self, t):
-        pass
+        for item in self.items():
+            if item not in t:
+                self.delete(item)
+        return self
 
     # return set s after removing elements found in t
     def difference_update(self, t):
-        pass
+        for item in self.items():
+            if item in t:
+                self.delete(item)
 
     # return set s with elements from s or t but not both
     def symmetric_difference_update(self, t):
-        pass
+        items_in_both = self.intersection(t)
+        self.difference_update(items_in_both)
+        return self
 
     # return true if every element in our set is in t
     def issubset(self, t):
-        pass
+        for item in self.items():
+            if item not in t:
+                return False
+        return True
 
     # return true if every element in t is in our set
     def issuperset(self, t):
-        pass
+        for item in t:
+            if not self.contains(item):
+                return False
+        return True
 
     # return new set with elements from both our set and t
     def union(self, t):
-        pass
+        new_set = Set(self.buckets)
+        for item in self.items():
+            new_set.add(item)
+        for item in t:
+            new_set.add(item)
+        return new_set
 
     # return new set with elements common to our set and t
     def intersection(self, t):
-        pass
+        new_set = Set(self.buckets)
+        for item in self.items():
+            if item in t:
+                new_set.add(item)
+
+        return new_set
 
     # return new set with elements in our set but not in t
     def difference(self, t):
-        pass
+        new_set = Set(self.buckets)
+        for item in self.items():
+            if item not in t:
+                new_set.add(item)
+
+        return new_set
 
     # return new set with elements in either our set or t but not both
     def symmetric_difference(self, t):
-        pass
+        new_set = Set(self.buckets)
+        for item in self.items():
+            if item in t:
+                continue
+            new_set.add(item)
+
+        return new_set
 
     # return new set with a shallow copy of s
     def copy(self, s):
