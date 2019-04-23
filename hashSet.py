@@ -1,11 +1,14 @@
 from __future__ import division
 #!python
 
+"""
+HashSet stores values for a set with a hashtable implementation.
+"""
+
 from linkedlist import LinkedList
 
-
-class HashTable(object):
-
+class HashSet(object):
+    
     def __init__(self, init_size=8, items = None):
         """Initialize this hash table with the given initial size."""
         self.buckets = [LinkedList() for i in range(init_size)]
@@ -13,17 +16,17 @@ class HashTable(object):
         # Insert each key-value entry into the list of buckets,
         # which will rehash them into a new bucket index based on the new size
         if items is not None: 
-            for key, value in items:
-                self.set(key, value)
+            for key in items:
+                self.set(key)
 
     def __str__(self):
         """Return a formatted string representation of this hash table."""
-        items = ['{!r}: {!r}'.format(key, val) for key, val in self.items()]
+        items = ['{!r}'.format(key) for key in self.items()]
         return '{' + ', '.join(items) + '}'
 
     def __repr__(self):
         """Return a string representation of this hash table."""
-        return 'HashTable({!r})'.format(self.items())
+        return 'HashSet({!r})'.format(self.items())
 
     def _bucket_index(self, key):
         """Return the bucket index where the given key would be stored."""
@@ -36,28 +39,6 @@ class HashTable(object):
         # return self.size//len(self.buckets)
         # return float:
         return self.size/len(self.buckets)
-
-    def keys(self):
-        """Return a list of all keys in this hash table.
-        Best and worst case running time: O(N) always where N is 
-        the total number of items in the hash table"""
-        # Collect all keys in each of the buckets
-        all_keys = []
-        for bucket in self.buckets:
-            for key, value in bucket.items():
-                all_keys.append(key)
-        return all_keys
-
-    def values(self):
-        """Return a list of all values in this hash table.
-        Best and worst case running time: O(N) always where N 
-        is the total number of items in the hash table"""
-        # Collect all values in each of the buckets
-        all_values = []
-        for bucket in self.buckets:
-            for key, value in bucket.items():
-                all_values.append(value)
-        return all_values
 
     def items(self):
         """Return a list of all entries (key-value pairs) in this hash table.
@@ -83,7 +64,7 @@ class HashTable(object):
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Check if an entry with the given key exists in that bucket
-        entry = bucket.find(lambda key_value: key_value[0] == key)
+        entry = bucket.find(lambda key_v: key_v == key)
         return entry is not None  # True or False
 
     def get(self, key):
@@ -94,16 +75,14 @@ class HashTable(object):
         index = self._bucket_index(key)
         bucket = self.buckets[index]
         # Find the entry with the given key in that bucket, if one exists
-        entry = bucket.find(lambda key_value: key_value[0] == key)
+        entry = bucket.find(lambda key_v: key_v == key)
         if entry is not None:  # Found
-            # Return the given key's associated value
-            assert isinstance(entry, tuple)
-            assert len(entry) == 2
-            return entry[1]
+            # Return the value
+            return entry
         else:  # Not found
             raise KeyError('Key not found: {}'.format(key))
 
-    def set(self, key, value):
+    def set(self, key):
         """Insert or update the given key with its associated value.
         Best case running time: O(1) if its the first element in the bucket
         Worst case running time: O(m), m = # of items in bucket, if its the last element in the bucket 
@@ -113,14 +92,14 @@ class HashTable(object):
         bucket = self.buckets[index]
         # Find the entry with the given key in that bucket, if one exists
         # Check if an entry with the given key exists in that bucket
-        entry = bucket.find(lambda key_value: key_value[0] == key)
+        entry = bucket.find(lambda key_v: key_v == key)
         if entry is not None:  # Found
             # In this case, the given key's value is being updated
             # Remove the old key-value entry from the bucket first
             bucket.delete(entry)
             self.size -= 1
         # Insert the new key-value entry into the bucket in either case
-        bucket.append((key, value))
+        bucket.append(key)
         self.size += 1 # update size
         # Check if the load factor exceeds a threshold such as 0.75
         if self.load_factor() > 0.75:
@@ -135,15 +114,10 @@ class HashTable(object):
         # Find the bucket the given key belongs in
         index = self._bucket_index(key)
         bucket = self.buckets[index]
-        # Find the entry with the given key in that bucket, if one exists
-        entry = bucket.find(lambda key_value: key_value[0] == key) # (O(m)), m = # of items in bucket
-        if entry is not None:  # Found
-            # Remove the key-value entry from the bucket
-            bucket.delete(entry) # (O(m)
-            self.size -= 1 # update size
-            print("DELETED, updated size: %d"%self.size)
-        else:  # Not found
-            raise KeyError('Key not found: {}'.format(key))
+        # Remove the key-value entry from the bucket
+        bucket.delete(key) # (O(m)
+        self.size -= 1 # update size
+        print("DELETED, updated size: %d"%self.size)
 
     def _resize(self, new_size=None):
         """Resize this hash table's buckets and rehash all key-value entries.
@@ -165,49 +139,49 @@ class HashTable(object):
         # and insert values into new buckets
         self.__init__(new_size, all_items) # O(N), N = # of items in hash table
 
-
 def test_hash_table():
-    ht = HashTable(4)
-    print('HashTable: ' + str(ht))
+    ht = HashSet(4)
+    print('HashSet: ' + str(ht))
 
     print('Setting entries:')
-    ht.set('I', 1)
-    print('set(I, 1): ' + str(ht))
-    ht.set('V', 5)
-    print('set(V, 5): ' + str(ht))
+    ht.set(1)
+    print('set(1): ' + str(ht))
+    ht.set(5)
+    print('set(5): ' + str(ht))
     print('size: ' + str(ht.size))
-    print('set(V, 10): ' + str(ht))
+    ht.set(10)
+    print('set(10): ' + str(ht))
     print('size: ' + str(ht.size))
     print('length: ' + str(ht.length()))
     print('buckets: ' + str(len(ht.buckets)))
     print('load_factor: ' + str(ht.load_factor()))
-    ht.set('X', 10)
-    print('set(X, 10): ' + str(ht))
-    ht.set('L', 50)  # Should trigger resize
-    print('set(L, 50): ' + str(ht))
+    ht.set(10)
+    print('set(10): ' + str(ht))
+    ht.set("V")  # Should trigger resize
+    print('set(V): ' + str(ht))
     print('size: ' + str(ht.size))
     print('length: ' + str(ht.length()))
     print('buckets: ' + str(len(ht.buckets)))
     print('load_factor: ' + str(ht.load_factor()))
 
     print('Getting entries:')
-    print('get(I): ' + str(ht.get('I')))
-    print('get(V): ' + str(ht.get('V')))
-    print('get(X): ' + str(ht.get('X')))
-    print('get(L): ' + str(ht.get('L')))
-    print('contains(X): ' + str(ht.contains('X')))
-    print('contains(Z): ' + str(ht.contains('Z')))
+    print('get(1): ' + str(ht.get(1)))
+    print('get(5): ' + str(ht.get(5)))
+    print('get(10): ' + str(ht.get(10)))
+    print('get(V): ' + str(ht.get("V")))
+    print('contains(5): ' + str(ht.contains(5)))
+    print('contains(V): ' + str(ht.contains("V")))
 
     print('Deleting entries:')
-    ht.delete('I')
-    print('delete(I): ' + str(ht))
-    ht.delete('V')
+    ht.delete(1)
+    print('delete(1): ' + str(ht))
+    ht.delete(5)
+    print('delete(5): ' + str(ht))
+    ht.delete(10)
+    print('delete(10): ' + str(ht))
+    ht.delete("V")
     print('delete(V): ' + str(ht))
-    ht.delete('X')
-    print('delete(X): ' + str(ht))
-    ht.delete('L')
-    print('delete(L): ' + str(ht))
-    print('contains(X): ' + str(ht.contains('X')))
+    print('contains(10): ' + str(ht.contains(10)))
     print('size: ' + str(ht.size))
     print('length: ' + str(ht.length()))
     print('buckets: ' + str(len(ht.buckets)))
@@ -216,3 +190,4 @@ def test_hash_table():
 
 if __name__ == '__main__':
     test_hash_table()
+
