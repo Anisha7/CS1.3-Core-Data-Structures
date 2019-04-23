@@ -33,7 +33,7 @@ class Set(HashSet):
     # remove x from set s; raises KeyError if not present
     def remove(self, item):
         """This function deletes an element from the set but raises an 
-        error if not found. The time complexity would be O(m) in the worst 
+        ValueError if not found. The time complexity would be O(m) in the worst 
         case, where m is the number of items in that bucket. The bests case 
         is O(1) and average case is O(1)because we maintain a load factor 
         of 0.75. Space complexity is O(1) because nothing new is being stored."""
@@ -56,10 +56,9 @@ class Set(HashSet):
 
         # will be O(1) because it gets the first item
         for bucket in self.buckets:
-            for item in bucket:
-                temp = item
-                bucket.delete(item) # O(1) also because deleting first item
-                return temp
+            for item in bucket.items():
+                self.remove(item) # O(1) also because deleting first item
+                return item
 
     # remove all elements from set s
     def clear(self):
