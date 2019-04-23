@@ -30,7 +30,6 @@ class Set(HashSet):
         O(1) because nothing new is being stored."""
         self.set(item)
 
-    # remove x from set s; raises KeyError if not present
     def remove(self, item):
         """This function deletes an element from the set but raises an 
         ValueError if not found. The time complexity would be O(m) in the worst 
@@ -39,7 +38,6 @@ class Set(HashSet):
         of 0.75. Space complexity is O(1) because nothing new is being stored."""
         self.delete(item)
 
-    # removes x from set s if present
     def discard(self, item):
         """This function deletes an element from the set. The time complexity 
         would be O(m) in the worst case, where m is the number of items 
@@ -49,8 +47,11 @@ class Set(HashSet):
         if self.contains(item):
             self.remove(item)
 
-    # remove and return an arbitrary element from s; raises KeyError if empty
     def pop(self):
+        """This function returns and deletes an element from the set. 
+        The time complexity would be O(1) always because we just get 
+        the first element. Space complexity is O(1) because nothing new 
+        is being stored."""
         if self.size == 0:
             raise KeyError('Empty Set')
 
@@ -60,7 +61,6 @@ class Set(HashSet):
                 self.remove(item) # O(1) also because deleting first item
                 return item
 
-    # remove all elements from set s
     def clear(self):
         """This function reinitializes an empty set. The time complexity is O(init size)
         and space complexity is also O(init size)."""
@@ -68,46 +68,60 @@ class Set(HashSet):
         # Note: it might be better to delete all elements to save space! 
         # Right now, it reallocates, thus using more space.
 
-    # return set s with elements added from t
     def update(self, t):
-        for item in t:
+        """This function adds all elements from t to our set. 
+        The time complexity is O(n) where n is the number of elements in t
+        and space complexity is also O(n) because we add that many elements."""
+        for item in t.items():
             self.add(item)
 
-    # return set s keeping only elements also found in t
     def intersection_update(self, t):
+        """This function updates our set to contain only elements also in t. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n) because we add that many elements."""
         for item in self.items():
             if item not in t:
                 self.delete(item)
         return self
 
-    # return set s after removing elements found in t
     def difference_update(self, t):
+        """This function updates our set to remove all elements also in t. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n) because we add that many elements."""
         for item in self.items():
             if item in t:
                 self.delete(item)
 
-    # return set s with elements from s or t but not both
     def symmetric_difference_update(self, t):
+        """This function updates our set to to have elements from our set and t but not in both. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n+m) because we add that many elements."""
         items_in_both = self.intersection(t)
-        self.difference_update(items_in_both)
-        return self
+        self.update(t) # add all elements from t
+        self.difference_update(items_in_both) # remove elements common to s and t
 
-    # return true if every element in our set is in t
     def issubset(self, t):
+        """This function returns true if our entire set is in t. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n) because we don't allocate new variables."""
         for item in self.items():
             if item not in t:
                 return False
         return True
 
-    # return true if every element in t is in our set
     def issuperset(self, t):
-        for item in t:
+        """This function returns true if all items in t are in our set. 
+        The time complexity is O(n) where n is the number of elements in t
+        and space complexity is also O(1) because we don't allocate new variables."""
+        for item in t.items():
             if not self.contains(item):
                 return False
         return True
 
-    # return new set with elements from both our set and t
     def union(self, t):
+        """This function returns a new set with all elements from our set and t. 
+        The time complexity is O(n) where n is max(elements in our set,elements in t)
+        and space complexity is also O(n) because we add that many elements."""
         new_set = Set(self.buckets)
         for item in self.items():
             new_set.add(item)
@@ -115,17 +129,22 @@ class Set(HashSet):
             new_set.add(item)
         return new_set
 
-    # return new set with elements common to our set and t
     def intersection(self, t):
-        new_set = Set(self.buckets)
+        """This function returns a new set with all elements that are in both our set and t. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n) because we add that many elements."""
+        print("BUT")
+        new_set = Set(len(self.buckets))
         for item in self.items():
             if item in t:
                 new_set.add(item)
 
         return new_set
 
-    # return new set with elements in our set but not in t
     def difference(self, t):
+        """This function returns a new set with all elements that are in our set but not in t. 
+        The time complexity is O(n) where n is the number of elements in our set
+        and space complexity is also O(n) because we add that many elements."""
         new_set = Set(self.buckets)
         for item in self.items():
             if item not in t:
@@ -133,8 +152,11 @@ class Set(HashSet):
 
         return new_set
 
-    # return new set with elements in either our set or t but not both
     def symmetric_difference(self, t):
+        """This function returns a new set with elements that are either in our 
+        set OR in t, but not both. The time complexity is O(n) where n is the 
+        number of elements in our set and space complexity is also O(n) because 
+        we add that many elements."""
         new_set = Set(self.buckets)
         for item in self.items():
             if item in t:

@@ -59,6 +59,16 @@ class SetTest(unittest.TestCase):
         item = ht.pop()
         assert item not in ht
         assert len(ht) == 8
+        item = ht.pop()
+        assert item not in ht
+        assert len(ht) == 7
+        item = ht.pop()
+        assert item not in ht
+        assert len(ht) == 6
+        item = ht.pop()
+        assert item is not None
+        assert item not in ht
+        assert len(ht) == 5
 
     def test_clear(self):
         ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
@@ -67,19 +77,68 @@ class SetTest(unittest.TestCase):
         assert len(ht) == 0
 
     def test_update(self):
-        pass
+        ht = Set(4)
+        t = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        ht.update(t)
+        assert "apple" in ht
+        assert 5 in ht
+        assert len(ht) == 9
 
     def test_intersection_update(self):
-        pass
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana", "blue"])
+        ht.intersection_update(t)
+        assert "apple" in ht
+        assert "orange" in ht
+        assert "banana" in ht
+        assert 5 not in ht
+        assert 15 not in ht
+        assert 43 not in ht
+        assert "hey" not in ht
+        assert "yo" not in ht
+        assert "52" not in ht
+        assert len(ht) == 3
+        assert "blue" not in ht
 
     def test_difference_update(self):
-        pass
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana", "blue"])
+        ht.difference_update(t)
+        assert "apple" not in ht
+        assert "orange" not in ht
+        assert "banana" not in ht
+        assert "blue" not in ht
+        assert 5 in ht
+        assert 15 in ht
+        assert 43 in ht
+        assert "hey" in ht
+        assert "yo" in ht
+        assert "52" in ht
 
     def test_symmetric_difference_update(self):
-        pass
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana", "blue"])
+        ht.symmetric_difference_update(t)
+        assert "apple" not in ht
+        assert "orange" not in ht
+        assert "banana" not in ht
+        assert "blue" in ht
+        assert 5 in ht
+        assert 15 in ht
+        assert 43 in ht
+        assert "hey" in ht
+        assert "yo" in ht
+        assert "52" in ht
 
     def test_issubset(self):
-        pass
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana"])
+        assert ht.issubset(t) == False
+        assert t.issubset(ht)
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana", "blue"])
+        assert ht.issubset(t) == False
+        assert t.issubset(ht) == False
 
     def test_issuperset(self):
         pass
