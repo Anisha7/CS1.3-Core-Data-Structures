@@ -122,10 +122,10 @@ class Set(HashSet):
         """This function returns a new set with all elements from our set and t. 
         The time complexity is O(n) where n is max(elements in our set,elements in t)
         and space complexity is also O(n) because we add that many elements."""
-        new_set = Set(self.buckets)
+        new_set = Set(len(self))
         for item in self.items():
             new_set.add(item)
-        for item in t:
+        for item in t.items():
             new_set.add(item)
         return new_set
 
@@ -134,7 +134,7 @@ class Set(HashSet):
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we add that many elements."""
         print("BUT")
-        new_set = Set(len(self.buckets))
+        new_set = Set(len(self))
         for item in self.items():
             if item in t:
                 new_set.add(item)
@@ -145,7 +145,7 @@ class Set(HashSet):
         """This function returns a new set with all elements that are in our set but not in t. 
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we add that many elements."""
-        new_set = Set(self.buckets)
+        new_set = Set(len(self))
         for item in self.items():
             if item not in t:
                 new_set.add(item)
@@ -157,16 +157,18 @@ class Set(HashSet):
         set OR in t, but not both. The time complexity is O(n) where n is the 
         number of elements in our set and space complexity is also O(n) because 
         we add that many elements."""
-        new_set = Set(self.buckets)
+        new_set = Set(len(self))
         for item in self.items():
-            if item in t:
-                continue
-            new_set.add(item)
+            if item not in t:
+                new_set.add(item)
 
+        for item in t.items():
+            if item not in self:
+                new_set.add(item)
         return new_set
 
-    # return new set with a shallow copy of s
-    def copy(self, s):
-        pass
+    # return new set with a shallow copy of our set
+    def copy(self):
+        return self
 
     

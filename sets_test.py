@@ -141,19 +141,54 @@ class SetTest(unittest.TestCase):
         assert t.issubset(ht) == False
 
     def test_issuperset(self):
-        pass
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana"])
+        assert ht.issuperset(t)
+        assert t.issuperset(ht) == False
+        ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
+        t = Set(4, ["apple", "orange", "banana", "blue"])
+        assert ht.issubset(t) == False
+        assert t.issuperset(ht) == False
 
     def test_union(self):
-        pass
+        ht = Set(4, [5, 15, 43])
+        t = Set(4, ["apple", "orange", "banana"])
+        new_set = ht.union(t)
+        assert new_set.issuperset(ht)
+        assert new_set.issuperset(t)
 
     def test_intersection(self):
-        pass
+        ht = Set(4, [5, 15, 43, "apple"])
+        t = Set(4, ["apple", "orange", "banana"])
+        new_set = ht.intersection(t)
+        assert len(new_set) == 1
+        assert "apple" in new_set
 
     def test_difference(self):
-        pass
+        ht = Set(4, [5, 15, 43, "apple"])
+        t = Set(4, ["apple", "orange", "banana"])
+        new_set = ht.difference(t)
+        assert len(new_set) == 3
+        assert 5 in new_set
+        assert 15 in new_set
+        assert 43 in new_set
 
     def test_symmetric_difference(self):
-        pass
+        ht = Set(4, [5, 15, 43, "apple"])
+        t = Set(4, ["apple", "orange", "banana"])
+        new_set = ht.symmetric_difference(t)
+        assert len(new_set) == 5
+        assert 5 in new_set
+        assert 15 in new_set
+        assert 43 in new_set
+        assert "orange" in new_set
+        assert "banana" in new_set
+        assert "apple" not in new_set
 
     def test_copy(self):
-        pass
+        ht = Set(4, [5, 15, 43, "apple"])
+        new_set = ht.copy()
+        new_set.add("boo")
+        assert "boo" in ht
+        new_set.delete("boo")
+        assert "boo" not in ht
