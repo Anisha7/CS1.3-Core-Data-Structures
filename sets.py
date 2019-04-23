@@ -13,6 +13,17 @@ class Set(HashSet):
         The complexity of this function is O(1) for time and space.
         This is because the size property is stored in the hash table."""
         return self.size
+
+    def __iter__(self):
+        """This function allows are set to be iterable. Elements can be 
+        looped over using 'for item in set'"""
+        return self._generator()
+
+    def _generator(self):
+        """This function is a helper for iterable. It stores the data we are 
+        currently on and gives the next item at each iteration of the loop."""
+        for item in self.items():
+            yield item
     
     def __contains__(self, item):
         """This function returns whether or not an element is in the set.
@@ -55,11 +66,9 @@ class Set(HashSet):
         if self.size == 0:
             raise KeyError('Empty Set')
 
-        # will be O(1) because it gets the first item
-        for bucket in self.buckets:
-            for item in bucket.items():
-                self.remove(item) # O(1) also because deleting first item
-                return item
+        for item in self:
+            self.remove(item) # O(1) also because deleting first item
+            return item
 
     def clear(self):
         """This function reinitializes an empty set. The time complexity is O(init size)
@@ -72,14 +81,14 @@ class Set(HashSet):
         """This function adds all elements from t to our set. 
         The time complexity is O(n) where n is the number of elements in t
         and space complexity is also O(n) because we add that many elements."""
-        for item in t.items():
+        for item in t:
             self.add(item)
 
     def intersection_update(self, t):
         """This function updates our set to contain only elements also in t. 
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we add that many elements."""
-        for item in self.items():
+        for item in self:
             if item not in t:
                 self.delete(item)
         return self
@@ -88,7 +97,7 @@ class Set(HashSet):
         """This function updates our set to remove all elements also in t. 
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we add that many elements."""
-        for item in self.items():
+        for item in self:
             if item in t:
                 self.delete(item)
 
@@ -104,7 +113,7 @@ class Set(HashSet):
         """This function returns true if our entire set is in t. 
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we don't allocate new variables."""
-        for item in self.items():
+        for item in self:
             if item not in t:
                 return False
         return True
@@ -113,8 +122,8 @@ class Set(HashSet):
         """This function returns true if all items in t are in our set. 
         The time complexity is O(n) where n is the number of elements in t
         and space complexity is also O(1) because we don't allocate new variables."""
-        for item in t.items():
-            if not self.contains(item):
+        for item in t:
+            if item not in self:
                 return False
         return True
 
@@ -123,9 +132,9 @@ class Set(HashSet):
         The time complexity is O(n) where n is max(elements in our set,elements in t)
         and space complexity is also O(n) because we add that many elements."""
         new_set = Set(len(self))
-        for item in self.items():
+        for item in self:
             new_set.add(item)
-        for item in t.items():
+        for item in t:
             new_set.add(item)
         return new_set
 
@@ -135,7 +144,7 @@ class Set(HashSet):
         and space complexity is also O(n) because we add that many elements."""
         print("BUT")
         new_set = Set(len(self))
-        for item in self.items():
+        for item in self:
             if item in t:
                 new_set.add(item)
 
@@ -146,7 +155,7 @@ class Set(HashSet):
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n) because we add that many elements."""
         new_set = Set(len(self))
-        for item in self.items():
+        for item in self:
             if item not in t:
                 new_set.add(item)
 
@@ -158,11 +167,11 @@ class Set(HashSet):
         number of elements in our set and space complexity is also O(n) because 
         we add that many elements."""
         new_set = Set(len(self))
-        for item in self.items():
+        for item in self:
             if item not in t:
                 new_set.add(item)
 
-        for item in t.items():
+        for item in t:
             if item not in self:
                 new_set.add(item)
         return new_set

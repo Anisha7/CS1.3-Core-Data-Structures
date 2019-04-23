@@ -192,3 +192,8 @@ class SetTest(unittest.TestCase):
         assert "boo" in ht
         new_set.delete("boo")
         assert "boo" not in ht
+
+    def test_iter(self):
+        ht = Set(4, [5, 15, 43, "apple"])
+        for item in ht:
+            assert item in ht
