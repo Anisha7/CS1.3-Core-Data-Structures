@@ -33,7 +33,9 @@ class Set(HashSet):
         """This function is a helper for iterable. It stores the data we are 
         currently on and gives the next item at each iteration of the loop."""
         for item in self.items():
-            yield item
+            # yield returns this item, but does not break out of the loop
+            # it continues to return each item until loop is over
+            yield item 
     
     def __contains__(self, item):
         """This function returns whether or not an element is in the set.
@@ -117,7 +119,7 @@ class Set(HashSet):
         The time complexity is O(n) where n is the number of elements in our set
         and space complexity is also O(n+m) because we add that many elements."""
         items_in_both = self.intersection(t)
-        self.update(t) # add all elements from t
+        self.update(t) # add all elements from updated t
         self.difference_update(items_in_both) # remove elements common to s and t
 
     def issubset(self, t):
@@ -142,7 +144,7 @@ class Set(HashSet):
         """This function returns a new set with all elements from our set and t. 
         The time complexity is O(n) where n is max(elements in our set,elements in t)
         and space complexity is also O(n) because we add that many elements."""
-        new_set = Set(len(self))
+        new_set = Set(len(self)+len(t)) # time+space optimization, to prevent a resize
         for item in self:
             new_set.add(item)
         for item in t:
@@ -151,12 +153,18 @@ class Set(HashSet):
 
     def intersection(self, t):
         """This function returns a new set with all elements that are in both our set and t. 
-        The time complexity is O(n) where n is the number of elements in our set
+        The time complexity is O(n) where n is min(our set, t)
         and space complexity is also O(n) because we add that many elements."""
-        print("BUT")
-        new_set = Set(len(self))
-        for item in self:
-            if item in t:
+        new_set = Set(min(len(self),len(t))) # space optimization, to allocate only needed space
+        # time optimization: loop through the smaller set
+        smaller = self
+        bigger = t
+        if len(self) > len(t):
+            smaller = t
+            bigger = self
+        # adding items to new_set
+        for item in smaller:
+            if item in bigger:
                 new_set.add(item)
 
         return new_set
@@ -177,7 +185,7 @@ class Set(HashSet):
         set OR in t, but not both. The time complexity is O(n) where n is the 
         number of elements in our set and space complexity is also O(n) because 
         we add that many elements."""
-        new_set = Set(len(self))
+        new_set = Set(min(len(self), len(t))) # space optimization, to prevent a resize
         for item in self:
             if item not in t:
                 new_set.add(item)

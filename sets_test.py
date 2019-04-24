@@ -171,10 +171,11 @@ class SetTest(unittest.TestCase):
 
     def test_intersection(self):
         ht = Set(4, [5, 15, 43, "apple"])
-        t = Set(4, ["apple", "orange", "banana"])
+        t = Set(4, ["apple", "orange", "banana", 43])
         new_set = ht.intersection(t)
-        assert len(new_set) == 1
+        assert len(new_set) == 2
         assert "apple" in new_set
+        assert 43 in new_set
 
     def test_difference(self):
         ht = Set(4, [5, 15, 43, "apple"])
