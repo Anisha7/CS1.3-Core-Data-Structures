@@ -176,8 +176,11 @@ class Set(HashSet):
                 new_set.add(item)
         return new_set
 
-    # return new set with a shallow copy of our set
     def copy(self):
+        """This function returns a new set that is a shallow copy of out set. 
+        This means that changes made to this set will affect our set as well.
+        The time complexity is O(1) and space complexity is also O(1) because 
+        we return a 'pointer' to our original set."""
         return self
 
     
