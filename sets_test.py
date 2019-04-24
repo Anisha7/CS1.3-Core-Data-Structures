@@ -36,6 +36,11 @@ class SetTest(unittest.TestCase):
         assert len(ht.buckets) == 8 # resizing works
         assert len(ht) == 5
         assert ht.contains(4)
+        # test adding duplicates
+        ht.add("app")
+        assert len(ht) == 5
+        ht.add("orange")
+        assert len(ht) == 5
 
         # test remove
         ht.remove("apple")
@@ -156,6 +161,13 @@ class SetTest(unittest.TestCase):
         new_set = ht.union(t)
         assert new_set.issuperset(ht)
         assert new_set.issuperset(t)
+        # test duplicate adding
+        ht = Set(4, [5, 15, 43])
+        t = Set(4, ["apple", "orange", "banana", 43])
+        new_set = ht.union(t)
+        assert new_set.issuperset(ht)
+        assert new_set.issuperset(t)
+        assert len(new_set) == 6
 
     def test_intersection(self):
         ht = Set(4, [5, 15, 43, "apple"])
@@ -190,10 +202,17 @@ class SetTest(unittest.TestCase):
         new_set = ht.copy()
         new_set.add("boo")
         assert "boo" in ht
+        assert "boo" in new_set
         new_set.delete("boo")
         assert "boo" not in ht
+        assert new_set == ht
 
     def test_iter(self):
         ht = Set(4, [5, 15, 43, "apple"])
         for item in ht:
             assert item in ht
+
+    def test_eq(self):
+        ht = Set(5, [1,2,3,4])
+        ht2 = Set(5, [1,2,3,4])
+        assert ht == ht2

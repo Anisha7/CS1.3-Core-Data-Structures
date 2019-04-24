@@ -7,6 +7,16 @@ class Set(HashSet):
     def __init__(self, init_size=8, items = None):
         super().__init__(init_size, items) # initialize variables in parent class
 
+    def __eq__(self, t):
+        """This function returns true if two sets are equal. It can
+        be used with the '==' operator when comparing two sets"""
+        if len(self) != len(t):
+            return False
+        for item in self:
+            if item not in t:
+                return False
+        return True
+
     def __len__(self):
         """This function returns the number of elements in the set.
         It can be used as len(set) in client implementations.
@@ -39,7 +49,8 @@ class Set(HashSet):
         in that bucket. The bests case is O(1) and average case is O(1)
         because we maintain a load factor of 0.75. Space complexity is
         O(1) because nothing new is being stored."""
-        self.set(item)
+        if item not in self:
+            self.set(item)
 
     def remove(self, item):
         """This function deletes an element from the set but raises an 
