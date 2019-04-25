@@ -58,6 +58,17 @@ class SetTest(unittest.TestCase):
         assert len(ht) == 2
         assert ("orange" not in ht)
 
+        # test adding strings with spaces
+        ht.add("hi there why")
+        assert "hi there why" in ht
+        assert len(ht) == 3
+        # test adding floats
+        ht.add(1.23503)
+        assert 1.23503 in ht
+        assert len(ht) == 4
+        ht.add(1.235)
+        assert 1.235 in ht
+
     def test_pop(self):
         ht = Set(4, ["apple", "orange", "banana", 5, 15, 43, "hey", "yo", "52"])
         assert len(ht) == 9
