@@ -3,6 +3,8 @@
 # iterative/recursive, individually implemented. This file has refactored code.
 # NOTE: Stretch challenges (Permutations and Anagrams) are at the bottom of this file.
 
+import time
+
 # ```````````````       HELPERS     ``````````````` #
 def find_pattern_index(text, pattern, i):
     if (pattern == ''):
@@ -62,6 +64,41 @@ def test_string_algorithms(text, pattern):
     indexes = find_all_indexes(text, pattern)
     print('find_all_indexes({!r}, {!r}) => {}'.format(text, pattern, indexes))
 
+def benchmarkStrings(s, word):
+    print("Finding {word} in {s}".format(word=word, s=s))
+    # Testing Contains
+    start = time.time()
+    contains(s, word)
+    end = time.time()
+    runtime = end - start
+    msg = "The runtime for Contains took {time} seconds to complete".format(time=runtime)
+    print(msg)
+
+    # Testing Find Index
+    start = time.time()
+    find_index(s, word)
+    end = time.time()
+    runtime = end - start
+    msg = "The runtime for Find Index took {time} seconds to complete".format(time=runtime)
+    print(msg)
+
+    # Testing Find All Indexes
+    start = time.time()
+    find_all_indexes(s, word) == [0, 12]
+    end = time.time()
+    runtime = end - start
+    msg = "The runtime for Find All Indexes took {time} seconds to complete".format(time=runtime)
+    print(msg)
+
+def SampleBenchmarkString():
+    print('\nBENCHMARKING\n')
+    s = 'aargoogooggooglgooglerabyargragooggooglegolgegooglegoogle'
+    word = 'google'
+    benchmarkStrings(s, word)
+    print('\n')
+    s = 'mantleeltnammantleeltnam'
+    word = 'man'
+    benchmarkStrings(s, word)
 
 def main():
     """Read command-line arguments and test string searching algorithms."""
@@ -79,6 +116,7 @@ def main():
         print("contains('abra cadabra', 'abra') => True")
         print("find_index('abra cadabra', 'abra') => 0")
         print("find_all_indexes('abra cadabra', 'abra') => [0, 8]")
+        SampleBenchmarkString()
 
 
 # '''''''''''''' STRETCH CHALLENGES: Permutations and Anagrams ''''''''''''''''''''''' #
