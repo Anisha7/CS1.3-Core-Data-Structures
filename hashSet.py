@@ -117,7 +117,6 @@ class HashSet(object):
         # Remove the key-value entry from the bucket
         bucket.delete(key) # (O(m)
         self.size -= 1 # update size
-        print("DELETED, updated size: %d"%self.size)
 
     def _resize(self, new_size=None):
         """Resize this hash table's buckets and rehash all key-value entries.
@@ -127,7 +126,6 @@ class HashSet(object):
         (for both because --> O(N/2) best case if reducing size, O(2N) if increasing size)
         Best and worst case space usage: O(s) where s is the new_size of linkedlist"""
         # If unspecified, choose new size dynamically based on current size
-        print("RESIZING")
         if new_size is None:
             new_size = len(self.buckets) * 2  # Double size
         # Option to reduce size if buckets are sparsely filled (low load factor)
