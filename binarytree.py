@@ -1,5 +1,7 @@
 #!python
 
+from stack import Stack
+
 
 class BinaryTreeNode(object):
 
@@ -28,14 +30,16 @@ class BinaryTreeNode(object):
         downward path from this node to a descendant leaf node).
         TODO: Best: log(N) if balanced and worst case running time: 
         O(N) if not balanced, where N = total items?"""
-        if self.data == None:
+        if self.left == None and self.right == None:
             return 0
-        # Check if left child has a value and if so calculate its height
-        left = 1 + height(self.left)
-        # Check if right child has a value and if so calculate its height
-        right = 1 + height(self.right)
-        # Return one more than the greater of the left height and right height
-        return max(left,right)
+        left = 0
+        right = 0
+        if self.left != None:
+            left = 1 + self.left.height()
+        if self.right != None:
+            right = 1 + self.right.height()
+        
+        return max(left, right)
 
 
 class BinarySearchTree(object):
@@ -209,6 +213,34 @@ class BinarySearchTree(object):
             # Recursively descend to the node's right child, if it exists
             return self._find_parent_node_recursive(item, node.right, node)  # Hint: Remember to update the parent parameter
 
+    def _child_direction(self, parent, item):
+        direction = ''
+        if (item < parent.data): # left
+            node = parent.left
+            direction = 'left'
+        if (item > parent.data): # right
+            node = parent.right
+            direction = 'right'
+        # item not found
+        if (node == None or node.data != item):
+            return None
+        return direction, node
+
+    def _sift_up(self, node, parent, direction):
+         # item not found
+        if (direction is None):
+            return
+
+        # lets move the left side up
+        if (direction == 'left'):
+            parent.left = node.left
+            parent.left.right = node.right
+        elif (direction == 'right'):
+            parent.right = node.left
+            parent.right.right = node.right
+
+        return
+
     def delete(self, item):
         """Remove given item from this tree, if present, or raise ValueError.
         TODO: Best case running time: ??? under what conditions?
@@ -217,12 +249,34 @@ class BinarySearchTree(object):
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
 
+        # find node to delete's parent
+        parent = self._find_parent_node_recursive(item, self.root)
+
+        # item in root
+        if parent is None and self.root is not None:
+            if self.root.data == item:
+                # check if left exists
+                if self.root.left is not None:
+                    temp = self.root.right
+                    self.root = self.root.left
+                    self.root.right = temp
+                else:
+                    self.root = self.root.right
+            return
+        # find if item is in left or right
+        direction, node = self._child_direction(parent, item)
+        self._sift_up(node, parent, direction)
+
+        return
+
     def items_in_order(self):
         """Return an in-order list of all items in this binary search tree."""
         items = []
         if not self.is_empty():
             # Traverse tree in-order from root, appending each node's item
             self._traverse_in_order_recursive(self.root, items.append)
+            # TODO:
+            # self._traverse_in_order_iterative(self.root, items.append)
         # Return in-order list of all items in tree
         return items
 
@@ -231,12 +285,14 @@ class BinarySearchTree(object):
         Start at the given node and visit each node with the given function.
         TODO: Running time: ??? Why and under what conditions?
         TODO: Memory usage: ??? Why and under what conditions?"""
-        # TODO: Traverse left subtree, if it exists
-        ...
-        # TODO: Visit this node's data with given function
-        ...
-        # TODO: Traverse right subtree, if it exists
-        ...
+        if (node is None):
+            return
+        # Traverse left subtree, if it exists
+        self._traverse_in_order_recursive(node.left, visit)
+        # Visit this node's data with given function
+        visit(node.data)
+        # Traverse right subtree, if it exists
+        self._traverse_in_order_recursive(node.right, visit)
 
     def _traverse_in_order_iterative(self, node, visit):
         """Traverse this binary tree with iterative in-order traversal (DFS).
@@ -244,6 +300,27 @@ class BinarySearchTree(object):
         TODO: Running time: ??? Why and under what conditions?
         TODO: Memory usage: ??? Why and under what conditions?"""
         # TODO: Traverse in-order without using recursion (stretch challenge)
+        # lets use a stack?
+        nodes = Stack()
+
+        while (node is not None):
+            nodes.push(node)
+            node = node.left
+        
+        while (not nodes.is_empty()):
+            node = nodes.pop()
+            visit(node.data)
+            print(nodes)
+            if (node.right is not None):
+                temp = node.right
+                # add node.right to stack
+                nodes.push(temp)
+                # add all of its left nodes to stack
+                while (temp is not None):
+                    temp = node.left
+                    nodes.push(temp)
+        return 
+
 
     def items_pre_order(self):
         """Return a pre-order list of all items in this binary search tree."""
@@ -341,12 +418,14 @@ def test_binary_search_tree():
     tree = BinarySearchTree()
     print('tree: {}'.format(tree))
     print('root: {}'.format(tree.root))
+    print('height: {}'.format(tree.height()))
 
     print('\nInserting items:')
     for item in items:
         tree.insert(item)
         print('insert({}), size: {}'.format(item, tree.size))
     print('root: {}'.format(tree.root))
+    print('height: {}'.format(tree.height()))
 
     print('\nSearching for items:')
     for item in items:
