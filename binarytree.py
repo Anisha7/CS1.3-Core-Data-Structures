@@ -75,6 +75,7 @@ class BinarySearchTree(object):
         Worst case running time: O(N) not a balanced tree?"""
         # Find a node with the given item, if any
         node = self._find_node_recursive(item, self.root)
+        # node = self._find_node_iterative(item, self.root)
         # Return True if a node was found, or False
         return node is not None
 
@@ -104,6 +105,7 @@ class BinarySearchTree(object):
             return
         # Find the parent node of where the given item should be inserted
         parent = self._find_parent_node_recursive(item, self.root)
+        # parent = self._find_parent_node_iterative(item)
         # Check if the given item should be inserted left of parent node
         if parent.data > item:
             # TODO: Create a new node and set the parent's left child
