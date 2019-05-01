@@ -28,8 +28,8 @@ class BinaryTreeNode(object):
     def height(self):
         """Return the height of this node (the number of edges on the longest
         downward path from this node to a descendant leaf node).
-        TODO: Best: log(N) if balanced and worst case running time: 
-        O(N) if not balanced, where N = total items?"""
+        Best case running time: log(N) if balanced and worst case running time: 
+        O(N) if not balanced, where N = total items"""
         if self.left == None and self.right == None:
             return 0
         left = 0
@@ -85,15 +85,16 @@ class BinarySearchTree(object):
         Worst case running time: O(N) not a balanced tree"""
         # Find a node with the given item, if any
         node = self._find_node_recursive(item, self.root)
-        # TODO: Return the node's data if found, or None
+        # Return the node's data if found, or None
         if node is None:
             return None
         return node.data
 
     def insert(self, item):
         """Insert the given item in order into this binary search tree.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: log(N) if balanced and 
+        Worst case running time: O(N) if not balanced, 
+        where N = total items"""
         # Handle the case where the tree is empty
         if self.is_empty():
             # Create a new root node
@@ -101,7 +102,6 @@ class BinarySearchTree(object):
             # Increase the tree size
             self.size += 1
             return
-        print("HERE")
         # Find the parent node of where the given item should be inserted
         parent = self._find_parent_node_recursive(item, self.root)
         # Check if the given item should be inserted left of parent node
@@ -216,6 +216,8 @@ class BinarySearchTree(object):
             return self._find_parent_node_recursive(item, node.right, node)  # Hint: Remember to update the parent parameter
 
     def _child_direction(self, parent, item):
+        '''Helper function for delete. Checks whether item 
+        is a left or right child of parent, if it exists.'''
         direction = ''
         if (item < parent.data): # left
             node = parent.left
@@ -229,6 +231,8 @@ class BinarySearchTree(object):
         return direction, node
 
     def _sift_up(self, node, parent, direction):
+        '''Helper function for delete. Sifts values up when 
+        a node is deleted from the tree.'''
          # item not found
         if (direction is None):
             return
