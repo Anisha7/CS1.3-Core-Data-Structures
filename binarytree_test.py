@@ -186,10 +186,13 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.root.data == 1
         assert tree.root.left is None
         assert tree.root.right.data is 3
+        assert tree.contains(1)
+        assert tree.contains(3)
         tree.delete(1)
         assert tree.root.data == 3
         assert tree.root.left is None
         assert tree.root.right is None
+        assert tree.contains(3)
         tree.delete(3)
         assert tree.root is None
 
@@ -202,20 +205,32 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.root.data == 2
         assert tree.root.left.data == 1
         assert tree.root.right.data == 6
-        # assert ...
-        # assert ...
-        # tree.delete(...)
-        # assert tree.root.data == ...
-        # assert tree.root.left.data == ...
-        # assert tree.root.right.data == ...
-        # assert ...
-        # assert ...
-        # tree.delete(...)
-        # assert tree.root.data == ...
-        # assert tree.root.left.data == ...
-        # assert tree.root.right.data == ...
-        # assert ...
-        # assert ...
+        assert tree.contains(3)
+        assert tree.contains(5)
+        assert tree.contains(7)
+        tree.delete(6)
+        assert tree.root.right.data == 5
+        assert tree.contains(3)
+        assert tree.contains(2)
+        assert tree.contains(7)
+        assert tree.contains(1)
+        tree.delete(3)
+        assert tree.root.right.left is None
+        assert tree.contains(2)
+        assert tree.contains(5)
+        assert tree.contains(1)
+        assert tree.contains(7)
+        tree.delete(7)
+        assert tree.contains(2)
+        assert tree.contains(5)
+        assert tree.contains(1)
+        tree.delete(5)
+        assert tree.contains(2)
+        assert tree.contains(1)
+        tree.delete(1)
+        assert tree.contains(2)
+        tree.delete(3)
+        assert tree.root is None
 
     def test_items_in_order_with_3_strings(self):
         # Create a complete binary search tree of 3 strings in level-order
@@ -238,12 +253,12 @@ class BinarySearchTreeTest(unittest.TestCase):
         # Ensure the post-order traversal of tree items is ordered correctly
         assert tree.items_post_order() == ['A', 'C', 'B']
 
-#     def test_items_level_order_with_3_strings(self):
-#         # Create a complete binary search tree of 3 strings in level-order
-#         items = ['B', 'A', 'C']
-#         tree = BinarySearchTree(items)
-#         # Ensure the level-order traversal of tree items is ordered correctly
-#         assert tree.items_level_order() == ['B', 'A', 'C']
+    def test_items_level_order_with_3_strings(self):
+        # Create a complete binary search tree of 3 strings in level-order
+        items = ['B', 'A', 'C']
+        tree = BinarySearchTree(items)
+        # Ensure the level-order traversal of tree items is ordered correctly
+        assert tree.items_level_order() == ['B', 'A', 'C']
 
     def test_items_in_order_with_7_numbers(self):
         # Create a complete binary search tree of 7 items in level-order
@@ -266,12 +281,12 @@ class BinarySearchTreeTest(unittest.TestCase):
         # Ensure the post-order traversal of tree items is ordered correctly
         assert tree.items_post_order() == [1, 3, 2, 5, 7, 6, 4]
 
-#     def test_items_level_order_with_7_numbers(self):
-#         # Create a complete binary search tree of 7 items in level-order
-#         items = [4, 2, 6, 1, 3, 5, 7]
-#         tree = BinarySearchTree(items)
-#         # Ensure the level-order traversal of tree items is ordered correctly
-#         assert tree.items_level_order() == [4, 2, 6, 1, 3, 5, 7]
+    def test_items_level_order_with_7_numbers(self):
+        # Create a complete binary search tree of 7 items in level-order
+        items = [4, 2, 6, 1, 3, 5, 7]
+        tree = BinarySearchTree(items)
+        # Ensure the level-order traversal of tree items is ordered correctly
+        assert tree.items_level_order() == [4, 2, 6, 1, 3, 5, 7]
 
 
 if __name__ == '__main__':

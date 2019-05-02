@@ -1,7 +1,7 @@
 #!python
 
 from stack import Stack
-
+from queue import Queue
 
 class BinaryTreeNode(object):
 
@@ -170,8 +170,8 @@ class BinarySearchTree(object):
         (or the parent node of where the given item would be if inserted)
         in this tree, or None if this tree is empty or has only a root node.
         Search is performed iteratively starting from the root node.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree"""
         # Start with the root node and keep track of its parent
         node = self.root
         parent = None
@@ -199,7 +199,9 @@ class BinarySearchTree(object):
         (or the parent node of where the given item would be if inserted)
         in this tree, or None if this tree is empty or has only a root node.
         Search is performed recursively starting from the given node
-        (give the root node to start recursion)."""
+        (give the root node to start recursion).
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree"""
         # Check if starting node exists
         if node is None:
             # Not found (base case)
@@ -219,7 +221,7 @@ class BinarySearchTree(object):
 
     def _child_direction(self, parent, item):
         '''Helper function for delete. Checks whether item 
-        is a left or right child of parent, if it exists.'''
+        is a left or right child of parent, if it exists. O(1)'''
         direction = ''
         if (item < parent.data): # left
             node = parent.left
@@ -229,30 +231,90 @@ class BinarySearchTree(object):
             direction = 'right'
         # item not found
         if (node == None or node.data != item):
-            return None
+            return None, None
         return direction, node
 
     def _sift_up(self, node, parent, direction):
         '''Helper function for delete. Sifts values up when 
-        a node is deleted from the tree.'''
+        a node is deleted from the tree. O(1)'''
          # item not found
         if (direction is None):
             return
 
+        # if node.left.height() > node.right.height():
         # lets move the left side up
         if (direction == 'left'):
             parent.left = node.left
             parent.left.right = node.right
         elif (direction == 'right'):
             parent.right = node.left
-            parent.right.right = node.right
+            if (parent.right is not None):
+                parent.right.right = node.right
+        # else:
+        # lets move the right side up
+            
+        return
+
+    def _get_successor(self, node):
+        '''Returns the element one step to the right and
+        as far left as possible.
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree'''
+        temp = node.right
+        while temp is not None:
+            temp = temp.left
+
+        return temp
+    
+    def _get_predecessor(self, node):
+        '''Returns the element one step to the left and
+        as far right as possible.
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree'''
+        temp = node.left
+        while temp is not None:
+            temp = temp.right
+
+        return temp
+
+    def _alan_delete(self, item):
+        # Best case running time: O(logN) if balanced tree, O(1) if first element
+        # Worst case running time: O(N) if unbalanced tree
+        node = self._find_node_recursive(item, self.root)
+        if node is None:
+            return
+        
+        parent = self._find_parent_node_recursive(item, self.root)
+        # predecessor and successor, use whichever is not None
+        pre = self._get_predecessor(node) # has no right node
+        suc = self._get_successor(node) # has no left node
+
+        if parent is None and item == self.root.data:
+            # item is root
+            if pre.is_leaf():
+                pre.left = self.root.left
+                pre.right = self.root.right
+                self.root = pre
+                # delete pre from its parent
+            elif suc.is_leaf():
+                suc.left = self.root.left
+                suc.right = self.root.right
+                self.root = suc
+                # delete suc from its parent
+        #     elif pre is not None:
+
+        # elif parent.data > item:
+        #     # item is on the left
+        
+        # elif parent.data < item:
+            # item is on the right
 
         return
 
     def delete(self, item):
         """Remove given item from this tree, if present, or raise ValueError.
-        TODO: Best case running time: ??? under what conditions?
-        TODO: Worst case running time: ??? under what conditions?"""
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree"""
         # TODO: Use helper methods and break this algorithm down into 3 cases
         # based on how many children the node containing the given item has and
         # implement new helper methods for subtasks of the more complex cases
@@ -267,7 +329,15 @@ class BinarySearchTree(object):
                 if self.root.left is not None:
                     temp = self.root.right
                     self.root = self.root.left
-                    self.root.right = temp
+                    # if this new node already has right children, find valid parent to insert
+                    if self.root.right is None:
+                        self.root.right = temp
+                    else:
+                        new_parent = self._find_parent_node_recursive(self.root.right.data, self.root)
+                        if new_parent.data > item:
+                            new_parent.left = temp
+                        else:
+                            new_parent.right = temp
                 else:
                     self.root = self.root.right
             return
@@ -291,8 +361,8 @@ class BinarySearchTree(object):
     def _traverse_in_order_recursive(self, node, visit):
         """Traverse this binary tree with recursive in-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         if (node is None):
             return
         # Traverse left subtree, if it exists
@@ -305,8 +375,8 @@ class BinarySearchTree(object):
     def _traverse_in_order_iterative(self, node, visit):
         """Traverse this binary tree with iterative in-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         # TODO: Traverse in-order without using recursion (stretch challenge)
         # lets use a stack?
         nodes = Stack()
@@ -342,8 +412,8 @@ class BinarySearchTree(object):
     def _traverse_pre_order_recursive(self, node, visit):
         """Traverse this binary tree with recursive pre-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         if (node is None): return
         # Visit this node's data with given function
         visit(node.data)
@@ -355,8 +425,8 @@ class BinarySearchTree(object):
     def _traverse_pre_order_iterative(self, node, visit):
         """Traverse this binary tree with iterative pre-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         # TODO: Traverse pre-order without using recursion (stretch challenge)
 
     def items_post_order(self):
@@ -371,8 +441,8 @@ class BinarySearchTree(object):
     def _traverse_post_order_recursive(self, node, visit):
         """Traverse this binary tree with recursive post-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         if (node is None): return
         # Traverse left subtree, if it exists
         self._traverse_post_order_recursive(node.left, visit)
@@ -384,8 +454,8 @@ class BinarySearchTree(object):
     def _traverse_post_order_iterative(self, node, visit):
         """Traverse this binary tree with iterative post-order traversal (DFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         # TODO: Traverse post-order without using recursion (stretch challenge)
 
     def items_level_order(self):
@@ -400,22 +470,24 @@ class BinarySearchTree(object):
     def _traverse_level_order_iterative(self, start_node, visit):
         """Traverse this binary tree with iterative level-order traversal (BFS).
         Start at the given node and visit each node with the given function.
-        TODO: Running time: ??? Why and under what conditions?
-        TODO: Memory usage: ??? Why and under what conditions?"""
+        Best case running time: O(logN) if balanced tree
+        Worst case running time: O(N) if unbalanced tree"""
         # TODO: Create queue to store nodes not yet traversed in level-order
-        queue = ...
+        queue = Queue()
         # TODO: Enqueue given starting node
-        ...
+        queue.enqueue(start_node)
         # TODO: Loop until queue is empty
-        while ...:
+        while (not queue.is_empty()):
             # TODO: Dequeue node at front of queue
-            node = ...
+            node = queue.dequeue()
             # TODO: Visit this node's data with given function
-            ...
+            visit(node.data)
             # TODO: Enqueue this node's left child, if it exists
-            ...
+            if (node.left is not None):
+                queue.enqueue(node.left)
             # TODO: Enqueue this node's right child, if it exists
-            ...
+            if (node.right is not None):
+                queue.enqueue(node.right)
 
 
 def test_binary_search_tree():
