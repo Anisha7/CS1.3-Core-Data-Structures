@@ -219,42 +219,6 @@ class BinarySearchTree(object):
             # Recursively descend to the node's right child, if it exists
             return self._find_parent_node_recursive(item, node.right, node)  # Hint: Remember to update the parent parameter
 
-    def _child_direction(self, parent, item):
-        '''Helper function for delete. Checks whether item 
-        is a left or right child of parent, if it exists. O(1)'''
-        direction = ''
-        if (item < parent.data): # left
-            node = parent.left
-            direction = 'left'
-        if (item > parent.data): # right
-            node = parent.right
-            direction = 'right'
-        # item not found
-        if (node == None or node.data != item):
-            return None, None
-        return direction, node
-
-    def _sift_up(self, node, parent, direction):
-        '''Helper function for delete. Sifts values up when 
-        a node is deleted from the tree. O(1)'''
-         # item not found
-        if (direction is None):
-            return
-
-        # if node.left.height() > node.right.height():
-        # lets move the left side up
-        if (direction == 'left'):
-            parent.left = node.left
-            parent.left.right = node.right
-        elif (direction == 'right'):
-            parent.right = node.left
-            if (parent.right is not None):
-                parent.right.right = node.right
-        # else:
-        # lets move the right side up
-            
-        return
-
     def _get_successor(self, node):
         '''Returns the element one step to the right and
         as far left as possible.
@@ -276,17 +240,86 @@ class BinarySearchTree(object):
             temp = temp.right
 
         return temp
+       
 
-    def _delete(self, item):
+    def _delete_with_successor(self, parent, node, suc):
+        # suc could have a right child
+        suc_parent = self._find_parent_node_recursive(suc.data, self.root)
+        temp = suc.right # if successor has a right child
+        
+
+        if (parent is None and node.data == self.root.data): # root node
+            # set suc's pointers to point to root's left and right
+            if node.data != suc_parent.data:
+                suc_parent.left = temp # restore its suc's parent to have suc's child
+            suc.left = self.root.left
+            if (self.root.right is not suc):
+                suc.right = self.root.right
+            # new root is the suc
+            self.root = suc
+
+        elif (parent.data > node.data): # left
+            # replace parent's left to be successor
+            if node.data != suc_parent.data:
+                suc_parent.left = temp # restore its suc's parent to have suc's child
+            suc.left = parent.left
+            suc.right = parent.right
+            parent.left = suc
+
+        elif (parent.data < node.data): # right
+            # replace parent's right to be successor
+            if node.data != suc_parent.data:
+                suc_parent.left = temp # restore its suc's parent to have suc's child
+            suc.left = parent.left
+            suc.right = parent.right
+            parent.right = suc
+
+
+    def _delete_with_predecessor(self, parent, node, pre):
+        # pre could have a left child
+        pre_parent = self._find_parent_node_recursive(pre.data, self.root)
+        temp = pre.left # if predecessor has a left child
+        pre_parent.right = temp # restore its pre's parent to have pre's child
+
+        if (parent is None and node.data == self.root.data): # root node
+            
+            # set suc's pointers to point to root's left and right
+            pre.left = self.root.left
+            pre.right = self.root.right
+            # new root is the suc
+            self.root = pre
+            
+        elif (parent.data > node.data): # left
+            # replace parent's left to be successor
+            pre.left = parent.left
+            pre.right = parent.right
+            parent.left = pre
+
+        elif (parent.data < node.data): # right
+            # replace parent's right to be successor
+            pre.left = parent.left
+            pre.right = parent.right
+            parent.right = pre
+
+    def delete(self, item):
+        """Remove given item from this tree, if present, or raise ValueError.
+        Best case running time: O(logN) if balanced tree, O(1) if first element
+        Worst case running time: O(N) if unbalanced tree"""
+        # TODO: Use helper methods and break this algorithm down into 3 cases
+        # based on how many children the node containing the given item has and
+        # implement new helper methods for subtasks of the more complex cases
+
         node = self._find_node_recursive(item, self.root)
         # not found
         if (node is None):
             return
         # find parent of node
         parent = self._find_parent_node_recursive(item, self.root)
-
+        # update size
+        self.size -= 1
         # node has no child
         if (node.is_leaf()):
+            print(self.root.data, item)
             # root node
             if (self.root.data == item):
                 self.root = None
@@ -329,100 +362,6 @@ class BinarySearchTree(object):
                 self._delete_with_predecessor(parent, node, pre)
             elif (suc is not None):
                 self._delete_with_successor(parent, node, suc)
-            elif (pre is None and suc is None):
-                print("HEREEEEE")
-            else:
-                print("BUT WHY")
-
-    def _delete_with_successor(self, parent, node, suc):
-        # suc could have a right child
-        suc_parent = self._find_parent_node_recursive(suc.data, self.root)
-        temp = suc.right # if successor has a right child
-        suc_parent.left = temp # restore its suc's parent to have suc's child
-
-        if (parent is None and node.data == self.root.data): # root node
-            
-            # set suc's pointers to point to root's left and right
-            suc.left = self.root.left
-            suc.right = self.root.right
-            # new root is the suc
-            self.root = suc
-            
-        elif (parent.data > node.data): # left
-            # replace parent's left to be successor
-            suc.left = parent.left
-            suc.right = parent.right
-            parent.left = suc
-
-        elif (parent.data < node.data): # right
-            # replace parent's right to be successor
-            suc.left = parent.left
-            suc.right = parent.right
-            parent.right = suc
-
-
-    def _delete_with_predecessor(self, parent, node, pre):
-        # pre could have a left child
-        pre_parent = self._find_parent_node_recursive(pre.data, self.root)
-        temp = pre.left # if predecessor has a left child
-        pre_parent.right = temp # restore its pre's parent to have pre's child
-
-        if (parent is None and node.data == self.root.data): # root node
-            
-            # set suc's pointers to point to root's left and right
-            pre.left = self.root.left
-            pre.right = self.root.right
-            # new root is the suc
-            self.root = pre
-            
-        elif (parent.data > node.data): # left
-            # replace parent's left to be successor
-            pre.left = parent.left
-            pre.right = parent.right
-            parent.left = pre
-
-        elif (parent.data < node.data): # right
-            # replace parent's right to be successor
-            pre.left = parent.left
-            pre.right = parent.right
-            parent.right = pre
-
-    def delete(self, item):
-        """Remove given item from this tree, if present, or raise ValueError.
-        Best case running time: O(logN) if balanced tree, O(1) if first element
-        Worst case running time: O(N) if unbalanced tree"""
-        # TODO: Use helper methods and break this algorithm down into 3 cases
-        # based on how many children the node containing the given item has and
-        # implement new helper methods for subtasks of the more complex cases
-
-        # find node to delete's parent
-        # parent = self._find_parent_node_recursive(item, self.root)
-
-        # # item in root
-        # if parent is None and self.root is not None:
-        #     if self.root.data == item:
-        #         # check if left exists
-        #         if self.root.left is not None:
-        #             temp = self.root.right
-        #             self.root = self.root.left
-        #             # if this new node already has right children, find valid parent to insert
-        #             if self.root.right is None:
-        #                 self.root.right = temp
-        #             else:
-        #                 new_parent = self._find_parent_node_recursive(self.root.right.data, self.root)
-        #                 if new_parent.data > item:
-        #                     new_parent.left = temp
-        #                 else:
-        #                     new_parent.right = temp
-        #         else:
-        #             self.root = self.root.right
-        #     return
-        # # find if item is in left or right
-        # direction, node = self._child_direction(parent, item)
-        # self._sift_up(node, parent, direction)
-
-        # return
-        self._delete(item)
 
     def items_in_order(self):
         """Return an in-order list of all items in this binary search tree."""

@@ -181,8 +181,10 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.contains(1)
         assert tree.contains(2)
         assert tree.contains(3)
+        assert tree.root.data == 2
         # TODO: Test structure of tree after each deletion
         tree.delete(2)
+        print(tree.root.data)
         assert tree.contains(1)
         assert tree.contains(3)
         assert tree.contains(2) == False
@@ -191,6 +193,8 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.contains(3)
         assert tree.contains(2) == False
         tree.delete(3)
+        print(tree)
+        print(tree.root)
         assert tree.root is None
 
     def test_delete_with_7_items(self):
