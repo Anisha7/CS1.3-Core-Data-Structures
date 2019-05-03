@@ -178,21 +178,18 @@ class BinarySearchTreeTest(unittest.TestCase):
         # Create a complete binary search tree of 3 items in level-order
         items = [2, 1, 3]
         tree = BinarySearchTree(items)
-        assert tree.root.data == 2
-        assert tree.root.left.data == 1
-        assert tree.root.right.data == 3
+        assert tree.contains(1)
+        assert tree.contains(2)
+        assert tree.contains(3)
         # TODO: Test structure of tree after each deletion
         tree.delete(2)
-        assert tree.root.data == 1
-        assert tree.root.left is None
-        assert tree.root.right.data is 3
         assert tree.contains(1)
         assert tree.contains(3)
+        assert tree.contains(2) == False
         tree.delete(1)
-        assert tree.root.data == 3
-        assert tree.root.left is None
-        assert tree.root.right is None
+        assert tree.contains(1) == False
         assert tree.contains(3)
+        assert tree.contains(2) == False
         tree.delete(3)
         assert tree.root is None
 
@@ -202,20 +199,19 @@ class BinarySearchTreeTest(unittest.TestCase):
         tree = BinarySearchTree(items)
         # TODO: Test structure of tree after each deletion
         tree.delete(4)
-        assert tree.root.data == 2
-        assert tree.root.left.data == 1
-        assert tree.root.right.data == 6
+        assert tree.contains(2)
+        assert tree.contains(1)
+        assert tree.contains(6)
         assert tree.contains(3)
         assert tree.contains(5)
         assert tree.contains(7)
         tree.delete(6)
-        assert tree.root.right.data == 5
+        assert tree.contains(5)
         assert tree.contains(3)
         assert tree.contains(2)
         assert tree.contains(7)
         assert tree.contains(1)
         tree.delete(3)
-        assert tree.root.right.left is None
         assert tree.contains(2)
         assert tree.contains(5)
         assert tree.contains(1)
@@ -229,7 +225,7 @@ class BinarySearchTreeTest(unittest.TestCase):
         assert tree.contains(1)
         tree.delete(1)
         assert tree.contains(2)
-        tree.delete(3)
+        tree.delete(2)
         assert tree.root is None
 
     def test_items_in_order_with_3_strings(self):
