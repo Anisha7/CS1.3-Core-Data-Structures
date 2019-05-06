@@ -396,10 +396,7 @@ class BinarySearchTree(object):
         # TODO: Traverse in-order without using recursion (stretch challenge)
         # lets use a stack?
         nodes = Stack()
-
-        while (node is not None):
-            nodes.push(node)
-            node = node.left
+        nodes.push(node)
         
         while (not nodes.is_empty()):
             node = nodes.pop()
@@ -434,7 +431,8 @@ class BinarySearchTree(object):
         # Visit this node's data with given function
         visit(node.data)
         # Traverse left subtree, if it exists
-        self._traverse_pre_order_recursive(node.left, visit)
+        # self._traverse_pre_order_recursive(node.left, visit)
+        self._traverse_pre_order_iterative(node.left, visit)
         # Traverse right subtree, if it exists
         self._traverse_pre_order_recursive(node.right, visit)
 
@@ -443,7 +441,18 @@ class BinarySearchTree(object):
         Start at the given node and visit each node with the given function.
         Best case running time: O(logN) if balanced tree
         Worst case running time: O(N) if unbalanced tree"""
-        # TODO: Traverse pre-order without using recursion (stretch challenge)
+        # Traverse pre-order without using recursion (stretch challenge)
+        s = Stack()
+        s.push(node)
+
+        while (not s.is_empty()):
+            node = s.pop()
+            if node is not None:
+                visit(node.data)
+                if (node is not None):
+                    s.push(node.right)
+                if (node is not None):
+                    s.push(node.left)
 
     def items_post_order(self):
         """Return a post-order list of all items in this binary search tree."""
