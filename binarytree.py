@@ -369,7 +369,6 @@ class BinarySearchTree(object):
         if not self.is_empty():
             # Traverse tree in-order from root, appending each node's item
             self._traverse_in_order_recursive(self.root, items.append)
-            # TODO:
             # self._traverse_in_order_iterative(self.root, items.append)
         # Return in-order list of all items in tree
         return items
@@ -382,8 +381,7 @@ class BinarySearchTree(object):
         if (node is None):
             return
         # Traverse left subtree, if it exists
-        # self._traverse_in_order_recursive(node.left, visit)
-        self._traverse_in_order_iterative(node.left, visit)
+        self._traverse_in_order_recursive(node.left, visit)
         # Visit this node's data with given function
         visit(node.data)
         # Traverse right subtree, if it exists
@@ -529,7 +527,8 @@ class BinarySearchTree(object):
         """Traverse this binary tree with iterative level-order traversal (BFS).
         Start at the given node and visit each node with the given function.
         Best case running time: O(logN) if balanced tree
-        Worst case running time: O(N) if unbalanced tree"""
+        Worst case running time: O(N) if unbalanced tree
+        Space: 2**height"""
         # TODO: Create queue to store nodes not yet traversed in level-order
         queue = Queue()
         # TODO: Enqueue given starting node
