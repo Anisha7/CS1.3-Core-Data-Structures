@@ -394,8 +394,8 @@ class BinarySearchTree(object):
         Start at the given node and visit each node with the given function.
         Best case running time: O(logN) if balanced tree
         Worst case running time: O(N) if unbalanced tree"""
-        # TODO: Traverse in-order without using recursion (stretch challenge)
-        # lets use a stack?
+        # Traverse in-order without using recursion (stretch challenge)
+        # lets use a stack
         nodes = Stack()
         nodes.push(node)
         
@@ -484,12 +484,37 @@ class BinarySearchTree(object):
         # Visit this node's data with given function
         visit(node.data)
 
+
     def _traverse_post_order_iterative(self, node, visit):
         """Traverse this binary tree with iterative post-order traversal (DFS).
         Start at the given node and visit each node with the given function.
         Best case running time: O(logN) if balanced tree
         Worst case running time: O(N) if unbalanced tree"""
         # TODO: Traverse post-order without using recursion (stretch challenge)
+        if (node is None):
+            return
+        s = Stack()
+        s.push(node)
+        
+        seenlr = set() # already added node's left and right
+        # visit left, then visit right, then visit node
+        while (not s.is_empty()):
+            node = s.pop()
+            if (node not in seenlr):
+                if (node.right is not None and node.left is not None):
+                    s.push(node)
+                    seenlr.add(node)
+                    if (node.right is not None):
+                        s.push(node.right)
+                    if (node.left is not None):
+                        s.push(node.left)
+                else:
+                    visit(node.data)
+            else:
+                visit(node.data)
+                
+            
+        
 
     def items_level_order(self):
         """Return a level-order list of all items in this binary search tree."""
